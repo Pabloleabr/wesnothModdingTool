@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>WMT</title>
+    </head>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script defer src="units_data.js"></script>
+    <script defer src="scripts/utils.js"></script>
+    <script defer src="scripts/infoDatas.js"></script>
+    <script defer src="script.js"></script>
+    
+    <body id="body">
+        <main>
+            <!-- Generic Info Modal -->
+        <div id="genericModal" class="modal" hidden="true" translate="no">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="modalTitle">ℹ️ Information</h2>
+                <div class="modal-panel" id="modalPanel"></div>
+            </div>
+        </div>
+
+        <!-- Main menu-->
+        <div id="mainPage" class="page">
+            <h1>⚔️ WMT ⚔️</h1>
+            <p>An easier way to mod Wesnoth. Create a new mod and get started.</p>
+            <h2>📦 Your Mods</h2>
+            <ul id="modsList">
+            </ul>
+            <button onclick="createMod();showPage('mainPage')">Create new mod</button>
+        </div>
+        <div id="modDetailsPage" class="page" hidden="true">
+            <h2>📜 <span id="modName"></span></h2>
+            <p>Make your custom units and add them to your own eras factions. Once done download the files and add them to your <u title="should be somewhere like: C:\Users\{USER}\Documents\My Games\Wesnoth{version}\data\add-ons">add-ons folder</u>.</p>
+            <p>Check the <a target="_blank" href="https://wiki.wesnoth.org/Distributing_content#The_Add-on_Server" title="wiki">wiki</a> for publishing</p>
+            <ul>
+                <li>
+                    <button onclick="showPage('erasPage'); populateEraList()">🏛️ Eras</button>
+                </li>
+                <li>
+                    <button onclick="showPage('unitsPage'); populateUnitList()">👥 Units</button>
+                </li>
+                <li>
+                    <button onclick="downloadMod(selectedMod);">📦 Download File</button>
+                </li>
+                <li>
+                    <button onclick="showPage('mainPage')">🔙 Back</button>
+                </li>
+            </ul>
+        </div>
+        <div id="erasPage" class="page" hidden="true">
+            <h2>🏛️ Eras</h2> 
+                <p>Make your eras each Era is a collection of factions you can play with, and each faction a collection of units.</p>
+                <button onclick="showPage('modDetailsPage')">🔙 Back</button>
+                <br>
+                <button onclick="addEraFrame()">➕ Add Era</button>
+                <div id="eraFramesContainer"></div>
+                <br>
+                <button onclick="saveEra()">📜 Save Eras</button>
+                
+
+
+        </div>
+        <div id="unitsPage" class="page" hidden="true">
+            <h2>👥 Units</h2> 
+            <ul>
+                <li><button onclick="showPage('modDetailsPage')">🔙 Back</button></li>
+                <li><button onclick=" selectedUnit = {}; showPage('UnitPage');">✨ Create New Unit</button></li>
+
+            </ul>
+            <ul id="unitsList">
+            </ul>
+        </div>
+        <div id="UnitPage" class="page" hidden="true">
+            <h2>👥 Unit</h2> 
+            <form id="UnitForm">
+                <h3>📋 Basic Info</h3>
+                <label for="unitName">Name:(unique!)</label>
+                <input type="text" id="unitName" name="unitName" required>
+                <label for="unitRace">Race:<button type="button" class="info-icon" onclick="openModal('Default Races Information', racesData)" title="View races information">ℹ️</button></label>
+                <input type="text" id="unitRace" name="unitRace">
+                <label for="unitDefaultAnimation">Use default animation:<button type="button" class="info-icon" onclick="openUnitsModal('Select By Image', unitAnimDefaultClick)" title="Select By Image">ℹ️</button></label>
+                <select type="text" class="attack-range" id="unitDefaultAnimation" name="unitDefaultAnimation" placeholder="No" onchange="unitAnimDefaultClick(this.value)">
+                    <option value="No">No</option>
+                </select>
+                <label for="unitImage">Image Path:</label>
+                <input type="text" id="unitImage" name="unitImage">
+                <label for="unitProfile">Portrait Path:</label>
+                <input type="text" id="unitProfile" name="unitProfile">
+                <label for="unitHitpoints">❤️ Hitpoints:</label>
+                <input type="number" id="unitHitpoints" name="unitHitpoints">
+                <label for="unitMovement">🚶 Movement:</label>
+                <input type="number" id="unitMovement" name="unitMovement">
+                <label for="unitMovementType">Movement Type:<button type="button" class="info-icon" onclick="openModal('Movement Types Information', movementTypesData)" title="View movement types information">ℹ️</button></label>
+                <input type="text" id="unitMovementType" name="unitMovementType">
+                <label for="unitCost">💰 Cost:</label>
+                <input type="number" id="unitCost" name="unitCost">
+                <label for="unitLevel">📊 Level:</label>
+                <input type="number" id="unitLevel" name="unitLevel">
+                <label for="unitExperience">⭐ Experience for level up:</label>
+                <input type="number" id="unitExperience" name="unitExperience">
+                <label for="unitAlignment">⚖️ Alignment:<button type="button" class="info-icon" onclick="openModal('Alignment Types Information', alignmentTypesData)" title="View Alignment types information">ℹ️</button></label>
+                <input type="text" id="unitAlignment" name="unitAlignment">
+                <label for="unitAdvancesTo" title="the unit it will advance to when leveling up">📈 Advances To:<button type="button" class="info-icon" onclick="openUnitsModal('Units by image', fillField, true)" title="View units by img">ℹ️</button></label>
+                <input type="text" id="unitAdvancesTo" name="unitAdvancesTo">
+                <label for="unitDescription">📖 Description:</label>
+                <textarea id="unitDescription" name="unitDescription"></textarea>
+                <label for="unitUsage" title="">🎯 Usage:<button type="button" class="info-icon" onclick="openModal('Default Usage Info', usageData)" title="View Usage information">ℹ️</button></label>
+                <input type="text" id="unitUsage" name="unitUsage">
+                <label for="unitDieSound">🔊 Die Sound:<button type="button" class="info-icon" onclick="openModal('Die Sounds Information', dieSoundsData)" title="View Die Sounds information">ℹ️</button></label>
+                <input type="text" id="unitDieSound" name="unitDieSound">
+
+                <h3 id="attackTitle">⚡ Attacks</h3>
+                <div id="attacksContainer"></div>
+                <button type="button" onclick="addAttack()">➕ Add Attack</button>
+                <br>
+
+                <h3>🛡️ Resistance <button type="button" class="info-icon" onclick="openModal('If not specified it will inherit from race', attackTypesData)" title="View Resistance information">ℹ️</button></h3>
+                <div id="resistanceContainer"></div>
+                <button type="button" onclick="addResistance()">➕ Add Resistance</button>
+                <br>
+
+                <h3>✨ Abilities</h3>
+                <label for="unitAbilities">Abilities (one per line):<button type="button" class="info-icon" onclick="openModal('Abilities Information', abilitiesData)" title="View Abilities information">ℹ️</button></label>
+                <textarea id="unitAbilities" name="unitAbilities" placeholder="{ABILITY_SUBMERGE}" ></textarea>
+                <br>
+                
+                <details id="customAnimations">
+                    <summary><h2>Custom Animations👈</h2></summary>
+                        <h3>Creation your own art</h3>
+                        <ul style="width: auto; max-width: 100%;">
+                            <li>You can use segmented sprites to make you own with these packs: </li><a target="_blank" href="https://wiki.wesnoth.org/FrankenPacks">FrankenPacks</a>
+                            <li>Use any  img or pixel art editing software. Recomendation:</li><a target="_blank"href="https://www.piskelapp.com/p/create/sprite/">PISKEL</a>
+                            <li>Have all your animations in separate files from 1 to the number of sprites and add the path to the image of your animation like so:</li>
+                            <li>"units/filename-[1~8].png:[150*3,200,150*4]"</li>
+                            <li>[1~8] is the amound of frames it will go through and :[the time in ms spend on each frame]</li>
+                        </ul>
+
+                    <h3>🏃 Standing Animation</h3>
+                    <label for="standingStartTime">Start Time:</label>
+                    <input type="number" id="standingStartTime" name="standingStartTime">
+                    <br>
+                    <div id="standingAnimContainer"></div>
+                    <button type="button" onclick="addStandingFrame()">➕ Add Standing Frame</button>
+                    <br>
+    
+                    <h3>⚔️ Attack Animations</h3>
+                    <div id="attackAnimsContainer"></div>
+                    <button type="button" onclick="addAttackAnim()">➕ Add Attack Animation</button>
+                    <br>
+                </details>
+
+                <button type="submit">✅ Save Unit</button>
+                <br>
+            </form>
+            <button onclick="showPage('unitsPage')">🔙 Back</button>
+        </div>
+        </main>
+        
+        <footer>
+            <p>WMT - Wesnoth Modding Tool V 0.1.0</p>
+        </footer>
+    </body>
+</html>
