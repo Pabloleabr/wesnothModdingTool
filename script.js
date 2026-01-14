@@ -59,6 +59,7 @@ function populateModList() {
   (mod) => {
     if (confirm(`Are you sure you want to delete mod "${mod.name}"? This action cannot be undone.`)) {
       delete data.mods[mod.name];
+      localStorage.setItem('data', JSON.stringify(data));
       populateModList();
     }
   });

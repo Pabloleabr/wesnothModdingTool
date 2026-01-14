@@ -265,7 +265,7 @@ const unitsData = {
   },
   "Dune Alchemist": {
     "id": "Dune Alchemist",
-    "image": "{PATH_TEMP}alchemist.png",
+    "image": "units/dunefolk/herbalist/alchemist.png",
     "profile": "portraits/dunefolk/herbalist.webp",
     "level": "2",
     "attack_anim": [
@@ -275,7 +275,7 @@ const unitsData = {
   },
   "Dune Apothecary": {
     "id": "Dune Apothecary",
-    "image": "{PATH_TEMP}apothecary.png",
+    "image": "units/dunefolk/herbalist/apothecary.png",
     "profile": "portraits/dunefolk/herbalist.webp",
     "level": "2",
     "attack_anim": [
@@ -284,7 +284,7 @@ const unitsData = {
   },
   "Dune Blademaster": {
     "id": "Dune Blademaster",
-    "image": "{PATH_TEMP}blademaster.png",
+    "image": "units/dunefolk/soldier/blademaster.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=sword\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}blademaster.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}\n    [/attack_anim]"
@@ -292,7 +292,7 @@ const unitsData = {
   },
   "Dune Burner": {
     "id": "Dune Burner",
-    "image": "{PATH_TEMP}burner.png",
+    "image": "units/dunefolk/burner/burner.png",
     "level": "1",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=dagger\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}burner.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS dagger-swish.wav dagger-swish.wav -150}\n    [/attack_anim]",
@@ -303,7 +303,7 @@ const unitsData = {
   },
   "Dune Captain": {
     "id": "Dune Captain",
-    "image": "{PATH_TEMP}captain.png",
+    "image": "units/dunefolk/soldier/captain.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=scimitar\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}captain.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}\n    [/attack_anim]"
@@ -311,7 +311,7 @@ const unitsData = {
   },
   "Dune Cataphract": {
     "id": "Dune Cataphract",
-    "image": "{PATH_TEMP}cataphract.png",
+    "image": "units/dunefolk/rider/cataphract.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=mace\n        [/filter_attack]\n        start_time=-250\n        horse_sound_start_time=-250\n        [frame]\n            image=\"{PATH_TEMP}cataphract-mace.png:300\"\n        [/frame]\n        [horse_sound_frame]\n            sound=horse-canter.wav\n        [/horse_sound_frame]\n        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}\n    [/attack_anim]",
@@ -321,7 +321,7 @@ const unitsData = {
   },
   "Dune Explorer": {
     "id": "Dune Explorer",
-    "image": "{PATH_TEMP}explorer.png",
+    "image": "units/dunefolk/rover/explorer.png",
     "profile": "portraits/dunefolk/rover.webp",
     "level": "2",
     "attack_anim": [
@@ -331,7 +331,7 @@ const unitsData = {
   },
   "Dune Falconer": {
     "id": "Dune Falconer",
-    "image": "{PATH_TEMP}falconer.png",
+    "image": "units/dunefolk/skirmisher/falconer.png",
     "profile": "portraits/dunefolk/falconer.webp",
     "level": "2",
     "attack_anim": [
@@ -348,7 +348,7 @@ const unitsData = {
   },
   "Dune Firetrooper": {
     "id": "Dune Firetrooper",
-    "image": "{PATH_TEMP}firetrooper.png",
+    "image": "units/dunefolk/burner/firetrooper.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=dagger\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}firetrooper.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS dagger-swish.wav dagger-swish.wav -150}\n    [/attack_anim]",
@@ -362,7 +362,7 @@ const unitsData = {
   },
   "Dune Harrier": {
     "id": "Dune Harrier",
-    "image": "{PATH_TEMP}harrier.png",
+    "image": "units/dunefolk/skirmisher/harrier.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=spear\n        [/filter_attack]\n        start_time=-250\n        [frame]\n            image=\"{PATH_TEMP}harrier.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}\n    [/attack_anim]",
@@ -371,7 +371,7 @@ const unitsData = {
   },
   "Dune Herbalist": {
     "id": "Dune Herbalist",
-    "image": "{PATH_TEMP}herbalist.png",
+    "image": "units/dunefolk/herbalist/herbalist.png",
     "profile": "portraits/dunefolk/herbalist.webp",
     "level": "1",
     "attack_anim": [
@@ -380,7 +380,7 @@ const unitsData = {
   },
   "Dune Horse Archer": {
     "id": "Dune Horse Archer",
-    "image": "{PATH_TEMP}horse-archer.png",
+    "image": "units/dunefolk/rider/horse-archer.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=mace\n        [/filter_attack]\n        start_time=-250\n        horse_sound_start_time=-250\n        [frame]\n            image=\"{PATH_TEMP}horse-archer.png:400\"\n        [/frame]\n        [horse_sound_frame]\n            sound=horse-canter.wav\n        [/horse_sound_frame]\n        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}\n    [/attack_anim]",
@@ -389,7 +389,7 @@ const unitsData = {
   },
   "Dune Luminary": {
     "id": "Dune Luminary",
-    "image": "{PATH_TEMP}luminary.png",
+    "image": "units/dunefolk/herbalist/luminary.png",
     "profile": "portraits/dunefolk/herbalist.webp",
     "level": "3",
     "attack_anim": [
@@ -398,7 +398,7 @@ const unitsData = {
   },
   "Dune Marauder": {
     "id": "Dune Marauder",
-    "image": "{TORCH_STATIC_IMAGE}",
+    "image": "units/dunefolk/rider/marauder.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=torch\n        [/filter_attack]\n        start_time=-250\n        horse_sound_start_time=-250\n        [frame]\n            image=\"{TORCH_STATIC_IMAGE}:400\"\n        [/frame]\n        [horse_sound_frame]\n            sound=horse-canter.wav\n        [/horse_sound_frame]\n        {SOUND:HIT_AND_MISS torch.ogg torch-miss.ogg -100}\n    [/attack_anim]",
@@ -410,7 +410,7 @@ const unitsData = {
   },
   "Dune Paragon": {
     "id": "Dune Paragon",
-    "image": "{PATH_TEMP}paragon.png",
+    "image": "units/dunefolk/soldier/paragon.png",
     "level": "4",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=sword\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}paragon.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}\n    [/attack_anim]",
@@ -419,7 +419,7 @@ const unitsData = {
   },
   "Dune Raider": {
     "id": "Dune Raider",
-    "image": "{TORCH_STATIC_IMAGE}",
+    "image": "units/dunefolk/rider/raider.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=torch\n        [/filter_attack]\n        start_time=-250\n        horse_sound_start_time=-250\n        [frame]\n            image=\"{TORCH_STATIC_IMAGE}:400\"\n        [/frame]\n        [horse_sound_frame]\n            sound=horse-canter.wav\n        [/horse_sound_frame]\n        {SOUND:HIT_AND_MISS torch.ogg torch-miss.ogg -100}\n    [/attack_anim]",
@@ -431,7 +431,7 @@ const unitsData = {
   },
   "Dune Rider": {
     "id": "Dune Rider",
-    "image": "{PATH_TEMP}rider.png",
+    "image": "units/dunefolk/rider/rider.png",
     "level": "1",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=mace\n        [/filter_attack]\n        start_time=-250\n        horse_sound_start_time=-250\n        [frame]\n            image=\"{PATH_TEMP}rider.png:400\"\n        [/frame]\n        [horse_sound_frame]\n            sound=horse-canter.wav\n        [/horse_sound_frame]\n        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}\n    [/attack_anim]",
@@ -440,7 +440,7 @@ const unitsData = {
   },
   "Dune Rover": {
     "id": "Dune Rover",
-    "image": "{PATH_TEMP}rover.png",
+    "image": "units/dunefolk/rover/rover.png",
     "profile": "portraits/dunefolk/rover.webp",
     "level": "1",
     "attack_anim": [
@@ -450,7 +450,7 @@ const unitsData = {
   },
   "Dune Scorcher": {
     "id": "Dune Scorcher",
-    "image": "{PATH_TEMP}scorcher.png",
+    "image": "units/dunefolk/burner/scorcher.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=dagger\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}scorcher.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS dagger-swish.wav dagger-swish.wav -150}\n    [/attack_anim]",
@@ -461,7 +461,7 @@ const unitsData = {
   },
   "Dune Skirmisher": {
     "id": "Dune Skirmisher",
-    "image": "{PATH_TEMP}skirmisher.png",
+    "image": "units/dunefolk/skirmisher/skirmisher.png",
     "level": "1",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=spear\n        [/filter_attack]\n        start_time=-250\n        [if]\n            direction=s,se,sw\n            [frame]\n                image=\"{PATH_TEMP}skirmisher.png:300\"\n            [/frame]\n        [/if]\n        [else]\n            direction=n,ne,nw\n            [frame]\n                image=\"{PATH_TEMP}skirmisher-ne.png:300\"\n            [/frame]\n        [/else]\n        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}\n    [/attack_anim]",
@@ -470,7 +470,7 @@ const unitsData = {
   },
   "Dune Sky Hunter": {
     "id": "Dune Sky Hunter",
-    "image": "{PATH_TEMP}sky_hunter.png",
+    "image": "units/dunefolk/skirmisher/sky_hunter.png",
     "profile": "portraits/dunefolk/falconer.webp",
     "level": "3",
     "attack_anim": [
@@ -487,7 +487,7 @@ const unitsData = {
   },
   "Dune Soldier": {
     "id": "Dune Soldier",
-    "image": "{PATH_TEMP}soldier.png",
+    "image": "units/dunefolk/soldier/soldier.png",
     "level": "1",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=scimitar\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}soldier.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}\n    [/attack_anim]"
@@ -495,7 +495,7 @@ const unitsData = {
   },
   "Dune Spearguard": {
     "id": "Dune Spearguard",
-    "image": "{PATH_TEMP}spearguard.png",
+    "image": "units/dunefolk/soldier/spearguard.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=spear\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}spearguard.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}\n    [/attack_anim]",
@@ -504,7 +504,7 @@ const unitsData = {
   },
   "Dune Spearmaster": {
     "id": "Dune Spearmaster",
-    "image": "{PATH_TEMP}spearmaster.png",
+    "image": "units/dunefolk/soldier/spearmaster.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=spear\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}spearmaster.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}\n    [/attack_anim]",
@@ -513,7 +513,7 @@ const unitsData = {
   },
   "Dune Strider": {
     "id": "Dune Strider",
-    "image": "{PATH_TEMP}strider.png",
+    "image": "units/dunefolk/skirmisher/strider.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=spear\n        [/filter_attack]\n        start_time=-250\n        [frame]\n            image=\"{PATH_TEMP}strider.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS spear.ogg spear-miss.ogg -100}\n    [/attack_anim]",
@@ -522,7 +522,7 @@ const unitsData = {
   },
   "Dune Sunderer": {
     "id": "Dune Sunderer",
-    "image": "{PATH_TEMP}sunderer.png",
+    "image": "units/dunefolk/rider/sunderer.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=mace\n        [/filter_attack]\n        start_time=-250\n        horse_sound_start_time=-250\n        [frame]\n            image=\"{PATH_TEMP}sunderer.png:400\"\n        [/frame]\n        [horse_sound_frame]\n            sound=horse-canter.wav\n        [/horse_sound_frame]\n        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}\n    [/attack_anim]",
@@ -531,7 +531,7 @@ const unitsData = {
   },
   "Dune Swordsman": {
     "id": "Dune Swordsman",
-    "image": "{PATH_TEMP}swordsman.png",
+    "image": "units/dunefolk/soldier/swordsman.png",
     "level": "2",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=scimitar_balance\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}swordsman.png:500\"\n        [/frame]\n        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}\n    [/attack_anim]",
@@ -540,7 +540,7 @@ const unitsData = {
   },
   "Dune Warmaster": {
     "id": "Dune Warmaster",
-    "image": "{PATH_TEMP}warmaster.png",
+    "image": "units/dunefolk/soldier/warmaster.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=scimitar\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}warmaster.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS {SOUND_LIST:SWORD_SWISH} {SOUND_LIST:MISS} -100}\n    [/attack_anim]"
@@ -548,7 +548,7 @@ const unitsData = {
   },
   "Dune Wayfarer": {
     "id": "Dune Wayfarer",
-    "image": "{PATH_TEMP}wayfarer.png",
+    "image": "units/dunefolk/rover/wayfarer.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=axe\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"{PATH_TEMP}wayfarer.png:300\"\n        [/frame]\n        {SOUND:HIT_AND_MISS axe.ogg {SOUND_LIST:MISS} -50}\n    [/attack_anim]",
@@ -557,7 +557,7 @@ const unitsData = {
   },
   "Dune Windbolt": {
     "id": "Dune Windbolt",
-    "image": "{PATH_TEMP}windbolt.png",
+    "image": "units/dunefolk/rider/windbolt.png",
     "level": "3",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=mace\n        [/filter_attack]\n        start_time=-250\n        horse_sound_start_time=-250\n        [frame]\n            image=\"{PATH_TEMP}windbolt.png:400\"\n        [/frame]\n        [horse_sound_frame]\n            sound=horse-canter.wav\n        [/horse_sound_frame]\n        {SOUND:HIT_AND_MISS mace.ogg mace-miss.ogg -100}\n    [/attack_anim]",
@@ -1030,11 +1030,6 @@ const unitsData = {
       "[attack_anim]\n        [filter_attack]\n            name=gossamer\n        [/filter_attack]\n        missile_start_time=-200\n        [missile_frame]\n            duration=150\n            image=\"projectiles/web.png\"\n            image_diagonal=\"projectiles/web.png\"\n        [/missile_frame]\n        start_time=-450\n        [frame]\n            image=\"units/elves-wood/sylph.png\"\n            halo=halo/elven/faerie-fire-halo[1~7].png:75\n            halo_x,halo_y=0,-28\n        [/frame]\n        attack_sound_start_time=-75\n        [attack_sound_frame]\n            sound=entangle.wav\n        [/attack_sound_frame]\n    [/attack_anim]",
       "[attack_anim]\n        [filter_attack]\n            name=faerie touch\n        [/filter_attack]\n        start_time=-200\n        [frame]\n            image=\"units/elves-wood/sylph.png:[400]\"\n        [/frame]\n    [/attack_anim]"
     ]
-  },
-  "Fog Clearer": {
-    "id": "Fog Clearer",
-    "image": "misc/blank-hex.png",
-    "level": "1"
   },
   "Direwolf Rider": {
     "id": "Direwolf Rider",
@@ -1966,7 +1961,7 @@ const unitsData = {
   },
   "Fire Ant": {
     "id": "Fire Ant",
-    "image": "{STATIC_IMAGE_TEMP}",
+    "image": "units/monsters/ant/fire-ant.png",
     "profile": "portraits/monsters/ant-fire.webp",
     "level": "1",
     "attack_anim": [
@@ -1982,7 +1977,7 @@ const unitsData = {
   },
   "Firebane Ant": {
     "id": "Firebane Ant",
-    "image": "{STATIC_IMAGE_TEMP}",
+    "image": "units/monsters/ant/firebane-ant.png",
     "profile": "portraits/monsters/ant-firebane.webp",
     "level": "2",
     "attack_anim": [
@@ -1998,7 +1993,7 @@ const unitsData = {
   },
   "Firebomb Ant": {
     "id": "Firebomb Ant",
-    "image": "{STATIC_IMAGE_TEMP}",
+    "image": "units/monsters/ant/firebomb-ant.png",
     "profile": "portraits/monsters/ant-firebomb.webp",
     "level": "2",
     "attack_anim": [
@@ -2014,7 +2009,7 @@ const unitsData = {
   },
   "Fire Ant Queen": {
     "id": "Fire Ant Queen",
-    "image": "{STATIC_IMAGE_TEMP}",
+    "image": "units/monsters/ant/fire-queen.png",
     "profile": "portraits/monsters/ant-fire-queen.webp",
     "level": "3",
     "attack_anim": [
@@ -2096,7 +2091,7 @@ const unitsData = {
   },
   "Caribe": {
     "id": "Caribe",
-    "image": "{CARIBE_IMAGE_PATH}/caribe-shadow.png~BLIT(",
+    "image": "units/monsters/caribe/caribe.png",
     "profile": "portraits/monsters/caribe.webp",
     "level": "1",
     "attack_anim": [
@@ -2114,7 +2109,7 @@ const unitsData = {
   },
   "Hunter Caribe": {
     "id": "Hunter Caribe",
-    "image": "{CARIBE_IMAGE_PATH}/caribe-shadow.png~BLIT(",
+    "image": "units/monsters/caribe/caribe.png",
     "profile": "portraits/monsters/caribe-hunter.webp",
     "level": "2",
     "attack_anim": [
@@ -2133,7 +2128,7 @@ const unitsData = {
   },
   "Nibbler": {
     "id": "Nibbler",
-    "image": "{CARIBE_IMAGE_PATH}/nibbler.png",
+    "image": "units/monsters/caribe/nibbler.png",
     "profile": "portraits/monsters/nibbler.webp",
     "level": "0",
     "attack_anim": [
@@ -2281,7 +2276,7 @@ const unitsData = {
   },
   "Fire Wraith": {
     "id": "Fire Wraith",
-    "image": "{IMG_PATH_TEMP}/firewraith.png",
+    "image": "units/monsters/firewraith/firewraith.png",
     "profile": "portraits/monsters/fire_wraith_A.webp",
     "level": "2",
     "attack_anim": [
@@ -2297,7 +2292,7 @@ const unitsData = {
   },
   "Frost Stoat": {
     "id": "Frost Stoat",
-    "image": "{FS_STANDING_FOG_TEMP 18 18},{FS_STANDING_FOG_TEMP 17 17},{FS_STANDING_FOG_TEMP 16 16},{FS_STANDING_FOG_TEMP 15 15},{FS_STANDING_FOG_TEMP 14 14},{FS_STANDING_FOG_TEMP 13 13},{FS_STANDING_FOG_TEMP 12 12},{FS_STANDING_FOG_TEMP 11 11},{FS_STANDING_FOG_TEMP 10 10},{FS_STANDING_FOG_TEMP 9 9}",
+    "image": "units/monsters/stoat/stoat.png",
     "profile": "portraits/monsters/stoat.webp",
     "level": "0",
     "attack_anim": [
@@ -2383,7 +2378,7 @@ const unitsData = {
   },
   "Black Horse": {
     "id": "Black Horse",
-    "image": "units/monsters/horse/horse-larger.png{HORSE_BLACK_IPF}",
+    "image": "units/monsters/horse/horse-larger.png",
     "profile": "portraits/monsters/horse.webp",
     "level": "2",
     "attack_anim": [
@@ -2393,7 +2388,7 @@ const unitsData = {
   },
   "Dark Horse": {
     "id": "Dark Horse",
-    "image": "units/monsters/horse/horse.png{HORSE_BLACK_IPF}",
+    "image": "units/monsters/horse/horse.png",
     "profile": "portraits/monsters/dark-horse.webp",
     "attack_anim": [
       "[attack_anim]\n        [filter_attack]\n            name=hooves\n        [/filter_attack]\n        start_time=-550\n        offset=0.0~-0.05:350,-0.05~0.7:200,0.7~0.0:320\n        [frame]\n            image=\"units/monsters/horse/horse-attack[1~7].png{HORSE_BLACK_IPF}:[100*4,80,70,260]\"\n            sound=horse-elf-canter.wav\n        [/frame]\n        [frame]\n            image=\"units/monsters/horse/horse.png{HORSE_BLACK_IPF}:60\"\n        [/frame]\n        {SOUND:HIT club.ogg -100}\n    [/attack_anim]",
@@ -2448,7 +2443,7 @@ const unitsData = {
   },
   "Jinn": {
     "id": "Jinn",
-    "image": "{IMG_PATH_TEMP}/jinn.png",
+    "image": "units/monsters/jinn/jinn.png",
     "profile": "portraits/monsters/jinn.webp",
     "level": "2",
     "attack_anim": [
@@ -2602,7 +2597,7 @@ const unitsData = {
   },
   "Great Seahorse": {
     "id": "Great Seahorse",
-    "image": "units/monsters/seahorse.png~O(0)~BLIT(units/monsters/seahorse.png)~MASK(units/monsters/seahorse-mask.png)",
+    "image": "units/monsters/seahorse.png",
     "profile": "portraits/monsters/seahorse.webp",
     "level": "1",
     "attack_anim": [
@@ -2656,7 +2651,7 @@ const unitsData = {
   },
   "Tentacle of the Deep": {
     "id": "Tentacle of the Deep",
-    "image": "units/monsters/deep-tentacle.png~O(0)~BLIT(halo/ripples/ripple10.png~CROP(0,0,72,53),0,19)~BLIT(units/monsters/deep-tentacle.png)",
+    "image": "units/monsters/deep-tentacle.png",
     "profile": "portraits/monsters/deep-tentacle.webp",
     "level": "1",
     "attack_anim": [
@@ -3245,7 +3240,7 @@ const unitsData = {
   },
   "Soulless": {
     "id": "Soulless",
-    "image": "units/undead/{BASE_NAME}.png",
+    "image": "units/undead/soulless.png",
     "profile": "portraits/undead/soulless.webp",
     "level": "1",
     "attack_anim": [
@@ -3272,7 +3267,7 @@ const unitsData = {
   },
   "Walking Corpse": {
     "id": "Walking Corpse",
-    "image": "units/undead/{BASE_NAME}.png",
+    "image": "units/undead/zombie.png",
     "profile": "portraits/undead/walking-corpse.webp",
     "level": "0",
     "attack_anim": [

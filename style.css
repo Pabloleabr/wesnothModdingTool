@@ -303,8 +303,15 @@ option {
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
+a {
+    color: #ffa500;
+}
+
 footer {
     text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     padding: 10px 0;
     color: #ffd700;
     font-size: 0.7em;
