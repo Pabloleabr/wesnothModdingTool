@@ -315,12 +315,18 @@ a {
 footer {
     text-align: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     gap: 10px;
     padding: 10px 0;
     color: #ffd700;
     font-size: 0.7em;
     margin-top: 20px;
+}
+
+footer div {
+    display: flex;
+        justify-content: center;
 }
 
 .modal-panel {
@@ -403,6 +409,16 @@ details summary::marker { display: none; }
 .attack-container{
     display: flex;
     flex-direction: column;
+}
+
+#mainPage > p{
+        font-size: small;
+    }
+
+@media only screen and (max-width: 1212px) {
+    #mainPage > p{
+        font-size: x-small;
+    }
 }
 
 @media only screen and (max-width: 458px) {
