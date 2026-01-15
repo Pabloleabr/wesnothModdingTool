@@ -50,7 +50,9 @@ function populateListBase(listId, items, onClick, deleteFunc) {
 }
 function populateModList() {
   const modList = Object.values(data.mods);
-
+  if (modList.length > 0){
+    document.getElementById('modsList').style.display = 'flex'
+  }
   populateListBase('modsList', modList, (mod) => {
     selectedMod = mod;
     localStorage.setItem('selectedMod', mod.name);
@@ -212,6 +214,7 @@ function populateEraList() {
       var event = new Event('change');
       name.dispatchEvent(event);
       eraDiv.querySelector('[name="defaultFactions"]').checked = era.defaultFactions || false;
+      eraDiv.querySelector('[name="defaultAoHFactions"]').checked = era.defaultAoHFactions || false;
       
       // Populate factions
       if (era.factions && era.factions.length > 0) {
@@ -278,6 +281,7 @@ function addAttack() {
   
   const div = document.createElement('div');
   div.id = attackId;
+  div.classList.add('attack-container')
   div.style.border = '1px solid #d1ad0a';
   div.style.padding = '10px';
   div.style.margin = '10px 0';
@@ -443,6 +447,9 @@ function addEraFrame() {
     <br>
     <label for="defaultFactions">Add default factions:</label>
     <input type="checkbox" id="defaultFactions" name="defaultFactions">
+    <br>
+    <label for="defaultAoHFactions">Add default AoH factions:</label>
+    <input type="checkbox" id="defaultAoHFactions" name="defaultAoHFactions">
     <div class="factionContainer"></div>
 
     <button type="button" style="margin: 6px 0;" onclick="addFaction('${id}')">Add Faction</button>
@@ -490,6 +497,7 @@ function saveEra() {
     const eraName = eraDiv.querySelector('[name="eraName"]').value;
     const eraId = eraName;
     const defaultFactions = eraDiv.querySelector('[name="defaultFactions"]').checked;
+    const defaultAoHFactions = eraDiv.querySelector('[name="defaultAoHFactions"]').checked;
     
     if (!eraId || !eraName) return; // Skip empty eras
     
@@ -525,6 +533,7 @@ function saveEra() {
       id: eraId,
       name: eraName,
       defaultFactions: defaultFactions,
+      defaultAoHFactions: defaultAoHFactions,
       factions: factions
     };
     

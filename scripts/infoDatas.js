@@ -196,8 +196,15 @@ const attackTypesData = [
 
 const attackSpecialsData = [
   {
-    name: 'Default Attack Specials',
-    children: ['{WEAPON_SPECIAL_PLAGUE}', '{WEAPON_SPECIAL_MARKSMAN}', '{WEAPON_SPECIAL_DRAIN}', '{WEAPON_SPECIAL_FIRSTSTRIKE}', '{WEAPON_SPECIAL_CHARGE}', '{WEAPON_SPECIAL_BERSERK}', '{WEAPON_SPECIAL_POISON}', '{WEAPON_SPECIAL_MAGICAL}', '{WEAPON_SPECIAL_BACKSTAB}', '{WEAPON_SPECIAL_SWARM}', '{WEAPON_SPECIAL_SLOW}', '{WEAPON_SPECIAL_DEFLECT}', '{WEAPON_SPECIAL_STUN}']
+    name: 'Default Attack Specials (Macro format) <a href="https://wiki.wesnoth.org/AbilitiesWML#The_.5Bspecials.5D_tag" target="_black">wiki descriptions</a>',
+    children: ['{WEAPON_SPECIAL_PLAGUE}', '{WEAPON_SPECIAL_MARKSMAN}', '{WEAPON_SPECIAL_DRAIN}', '{WEAPON_SPECIAL_FIRSTSTRIKE}', '{WEAPON_SPECIAL_CHARGE}', '{WEAPON_SPECIAL_BERSERK}', '{WEAPON_SPECIAL_POISON}', '{WEAPON_SPECIAL_MAGICAL}', '{WEAPON_SPECIAL_BACKSTAB}', '{WEAPON_SPECIAL_SWARM}', '{WEAPON_SPECIAL_SLOW}', '{WEAPON_SPECIAL_DEFLECT}', '{WEAPON_SPECIAL_STUN}', 
+      '<h4>Custom value example:</h4>', `[drains]
+        <br>id=greater drains
+        <br>name= _ "greater drains"
+        <br>description= _ "This unit drains health from living units, healing itself for the full amount of damage it deals."
+        <br>special_note={INTERNAL:SPECIAL_NOTES_DRAIN}
+        <br>value=100
+    <br>[/drains]`]
   }
 ]
 
@@ -211,7 +218,7 @@ const dieSoundsData = [
 
 const abilitiesData = [
   {
-    name: 'Default Abilities',
+    name: 'Default Abilities (Macro format) <a href="https://wiki.wesnoth.org/AbilitiesWML#The_.5Babilities.5D_tag" target="_black">wiki descriptions</a>',
     children: ['{ABILITY_CONCEALMENT}', '{ABILITY_ILLUMINATES HALO="halo/illuminates-aura.png"}', '{ABILITY_FEEDING}', '{ABILITY_AMBUSH}', '{ABILITY_REGENERATES}', '{ABILITY_BURROW}', '{ABILITY_SELF_HEAL}', '{ABILITY_TELEPORT}', '{ABILITY_DIVERSION}', '{ABILITY_CURES}', '{ABILITY_HEALS}', '{ABILITY_SKIRMISHER}', '{ABILITY_STEADFAST}', '{ABILITY_LEADERSHIP}', '{ABILITY_EXTRA_HEAL}', '{ABILITY_NIGHTSTALK}', '{ABILITY_SUBMERGE}']
   }
 ];

@@ -46,20 +46,22 @@ function eraToWesnothString(eras) {
     result += addAttribute('name', `_ "${era.name}"`);
     result += '{RANDOM_SIDE}\n';
     if (era.defaultFactions) {
-      result += `{multiplayer/factions/drakes-aoh.cfg}
-{multiplayer/factions/drakes-default.cfg}
-{multiplayer/factions/dunefolk-aoh.cfg}
+      result +=`{multiplayer/factions/drakes-default.cfg}
 {multiplayer/factions/dunefolk-default.cfg}
-{multiplayer/factions/knalgans-aoh.cfg}
 {multiplayer/factions/knalgans-default.cfg}
-{multiplayer/factions/loyalists-aoh.cfg}
 {multiplayer/factions/loyalists-default.cfg}
-{multiplayer/factions/northerners-aoh.cfg}
 {multiplayer/factions/northerners-default.cfg}
-{multiplayer/factions/rebels-aoh.cfg}
 {multiplayer/factions/rebels-default.cfg}
-{multiplayer/factions/undead-aoh.cfg}
 {multiplayer/factions/undead-default.cfg}\n`
+    }
+    if (era.defaultAoHFactions) {
+      result += `{multiplayer/factions/drakes-aoh.cfg}
+{multiplayer/factions/dunefolk-aoh.cfg}
+{multiplayer/factions/knalgans-aoh.cfg}
+{multiplayer/factions/loyalists-aoh.cfg}
+{multiplayer/factions/northerners-aoh.cfg}
+{multiplayer/factions/rebels-aoh.cfg}
+{multiplayer/factions/undead-aoh.cfg}\n`
     }
     // Process each faction as multiplayer_side
     if (era.factions && era.factions.length > 0) {
