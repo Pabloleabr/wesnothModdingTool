@@ -59,7 +59,7 @@ function eraToWesnothString(eras) {
 {multiplayer/factions/rebels-aoh.cfg}
 {multiplayer/factions/rebels-default.cfg}
 {multiplayer/factions/undead-aoh.cfg}
-{multiplayer/factions/undead-default.cfg}`
+{multiplayer/factions/undead-default.cfg}\n`
     }
     // Process each faction as multiplayer_side
     if (era.factions && era.factions.length > 0) {
@@ -143,12 +143,27 @@ function downloadMod(modData) {
 [/units]`
     const unitFiles = Object.values(modData.units).map(unit => {
       const unitString = unitToWesnothString(unit);
-      return { name: `units/${unit.id}.cfg`, content: unitString };
+      return { name: `units/${unit.id.replaceAll(' ', '_')}.cfg`, content: unitString };
     });
     files.push(...unitFiles);
   }
   files.push({ name: '_main.cfg', content: main });
+  files.push({ name: 'modExport.json', content: JSON.stringify(modData) });
   downloadFolderAsZip(modData.name, files);
+}
+
+function importModData() {
+  try {
+    const parsed = JSON.parse(document.getElementById('importModDataTextarea').value);
+    if (parsed.name in data.mods){
+      throw new Error("Mod with the same name already loaded")
+    }
+    data.mods[parsed.name] = parsed;
+    populateModList();
+    closeModal();
+  } catch (e) {
+    alert(`Error importing mod data: ${e}`);
+  }
 }
 
 function parseWesnothUnit(unitString) {

@@ -29,8 +29,9 @@ function openModal(title, listData, targetId = '') {
   const modalPanel = document.getElementById('modalPanel');
 
   modalTitle.textContent = title;
-  
-  modalPanel.innerHTML = `<ul>${targetId ? generateImgListHTML(listData, targetId) : generateListHTML(listData)}</ul>`;
+  if (listData.length > 0) {
+    modalPanel.innerHTML = `<ul>${targetId ? generateImgListHTML(listData, targetId) : generateListHTML(listData)}</ul>`;
+  }
   modal.removeAttribute('hidden');
 }
 
