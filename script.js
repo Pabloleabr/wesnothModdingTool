@@ -476,7 +476,7 @@ function addFaction(eraId) {
     <input type="text" Name="factionType" name="factionType" placeholder="Chaotic,Neutral or Lawful">
     <label for="factionLeaders">Leaders:</label>
     <input type="text" Name="factionLeaders" name="factionLeaders" placeholder="Ghost,Ghoul or Ghost">
-    <label for="factionRecruits">Recruits:<button type="button" class="info-icon" onclick="openUnitsModal('Add By Image', addToFieldWithComas, true)" title="Add By Image">ℹ️</button></label>
+    <label for="factionRecruits">Recruits:<button type="button" class="info-icon" onclick="openUnitsModal('Add By Image', addToFieldWithComas, true); recruitsElement = this.parentElement.nextElementSibling;" title="Add By Image">ℹ️</button></label>
     <input type="text" Name="factionRecruits" name="factionRecruits" placeholder="Ghost,Ghoul or Ghost">
     <label for="factionAI">AI recruit order: (usage field of units)</label>
     <input type="text" Name="factionAI" name="factionAI" placeholder="fighter,scout,archer">

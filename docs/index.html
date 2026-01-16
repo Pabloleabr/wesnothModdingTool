@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to mod wesnoth</title>
+    <meta name="description" content="Guide on how to mod wesnoth using the wesnothmoddingtool site">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="shortcut icon" href="../imgs/icon-modtool.ico" type="image/x-icon">
+
+</head>
+<body id="body">
+    <main>
+        <div class="page doc">
+            <a href="/">🔙 Go Back</a>
+            <h1>How to quickly make your mod</h1>
+            <p>A quick guide on how to use mod wesnoth using this sites tool without touching any code</p>
+            <p>Lets start by clicking the "Create a new mod" button and givint it a unique name</p>
+            <img src="../imgs/docs/create_mod.PNG" alt="Creating mod page image">
+            <br>
+            <h4>Start by making a unit</h4>
+            <img src="../imgs/docs/mod_details.PNG" alt="Mod details page">
+            <p>The easiest way to make a unit is to use the game's original animations; this will automatically give it the images and animations of the unit of your choosing.</p>
+            <img src="../imgs/docs/units_deafult_anim.PNG" alt="Default animation button location">
+            <p>Most complex fields will have an info button that will show you the different default options for that field</p>
+            <video autoplay loop muted width="640" height="360" src="../videos/gif/info_demostration.mp4">
+                shows information on how to get started with mod creation
+            </video>
+            <br>
+            <p>You can also try adding your custom animations by using the following tools:</p>
+            <ul style="width: auto; max-width: 100%;">
+                <li>Segmented sprites to make you own with these packs: </li><a target="_blank" href="https://wiki.wesnoth.org/FrankenPacks">FrankenPacks</a>
+                <li>Any img or pixel art editing software. Recomendation:</li><a target="_blank"href="https://www.piskelapp.com/p/create/sprite/">PISKEL</a>
+                <li>Have all your animations in separate folder from 1 to the number of sprites and add the path to the image of your animation like so:</li>
+                <li>"imgs/units/filename-[1~8].png:[150*3,200,150*4]"</li>
+                <li>[1~8] is the amount of frames it will go through and :[the time in ms spend on each frame]</li>
+            </ul>
+            <img src="../imgs/docs/customAnim.PNG" alt="Custom animation section">
+            <p>The custom animation tool is still a work in progress feel free to to <a href="https://github.com/Pabloleabr/wesnothModdingTool">make your own improvements</a> if you feel up to it</p>
+            <p>Once done you unit will display in the units page and can be edited</p>
+            <img src="../imgs/docs/units_show_case.PNG" alt="Units list showcase">
+            <br>
+            <h4>Adding your units to an Era</h4>
+            <p>Once you have your custom units made you will need to add them to a Faction within an Era to be able to play them</p>
+            <p>In you mod main page click the Eras button which will bring you to the following page:</p>
+            <img src="../imgs/docs/eraPage.PNG" alt="Eras customization page">
+            <p>
+                Here you can select to have the default game factions added to your Era (recomended if you only make 1 or 2 factions), you can choose to add the Age of Heros version which are level 3 leaders
+            </p>
+            <p>The type and image field can be ignored since they are cosmetic, for the leaders and recruits input their names separeted by comas has shown, and AI usage order lets you choose the types of untis the AI will use if using this faction</p>
+            <p>Different eras can be made to make your own game modes with higher level leaders or what ever you come up with</p>
+            <h4>Usefull links while modding</h4>
+            <ul>
+                <li><a href="https://units.wesnoth.org/trunk/mainline/en_US/mainline.html">Units database</a></li>
+                <li><a href="https://forums.wesnoth.org/viewtopic.php?t=24320">Add-on server rules</a></li>
+                <li><a href="https://forums.wesnoth.org/viewtopic.php?t=34782">Balancing and designing tips</a></li>
+            </ul>
+            <br>
+            <a href="/">Get Started</a>
+            <br>
+        </div>
+    </main>
+</body>
+</html>

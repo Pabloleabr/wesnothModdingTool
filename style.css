@@ -381,6 +381,18 @@ summary:hover {
 details summary::-webkit-details-marker { display: none; } 
 details summary::marker { display: none; }
 
+video {
+    border: 2px solid #ffa500;
+}
+
+.doc img {
+    border: 2px solid #ffa500;
+}
+
+.doc ul {
+    gap: 10px;
+}
+
 .faction-frame {
     display: flex;
     flex-direction: column;
@@ -418,6 +430,15 @@ details summary::marker { display: none; }
 @media only screen and (max-width: 1212px) {
     #mainPage > p{
         font-size: x-small;
+    }
+    h1 {
+        font-size: xx-large;
+    }
+}
+
+@media only screen and (max-width: 986px) {
+    .doc img, .doc video{
+        width: 100%;
     }
 }
 

@@ -89,8 +89,10 @@ function generateYourUnitImgListHTML(units, onclick) {
   return ul;
 }
 
+let recruitsElement
+
 function addToFieldWithComas(value) {
-  const field = document.querySelector('[name="factionRecruits"]');
+  const field = recruitsElement
   if (field.value) {
     field.value += ',';
   }
