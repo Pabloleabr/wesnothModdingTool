@@ -470,11 +470,11 @@ function addFaction(eraId) {
     <h3>Faction</h3>
     <label for="factionName">Name:</label>
     <input type="text" Name="factionName" name="factionName" required>
-    <label for="factionImage">Image Path:</label>
+    <label for="factionImage">Image Path:<button type="button" class="info-icon" onclick="openUnitsModal('Add By Image', (unit) => this.parentElement.nextElementSibling.value = unit.image, true);" title="Add By Image">ℹ️</button></label>
     <input type="text" Name="factionImage" name="factionImage" placeholder="units/monsters/boar/piglet.png">
     <label for="factionType">Type:(Cosmetic)</label>
     <input type="text" Name="factionType" name="factionType" placeholder="Chaotic,Neutral or Lawful">
-    <label for="factionLeaders">Leaders:</label>
+    <label for="factionLeaders">Leaders:<button type="button" class="info-icon" onclick="openUnitsModal('Add By Image', addToFieldWithComas, true); recruitsElement = this.parentElement.nextElementSibling;" title="Add By Image">ℹ️</button></label>
     <input type="text" Name="factionLeaders" name="factionLeaders" placeholder="Ghost,Ghoul or Ghost">
     <label for="factionRecruits">Recruits:<button type="button" class="info-icon" onclick="openUnitsModal('Add By Image', addToFieldWithComas, true); recruitsElement = this.parentElement.nextElementSibling;" title="Add By Image">ℹ️</button></label>
     <input type="text" Name="factionRecruits" name="factionRecruits" placeholder="Ghost,Ghoul or Ghost">
