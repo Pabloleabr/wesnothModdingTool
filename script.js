@@ -111,7 +111,6 @@ function populateUnitForm() {
       addAttack();
       const attackDiv = document.querySelectorAll('#attacksContainer > div')[index];
       attackDiv.querySelector('.attack-name').value = attack.name || '';
-      attackDiv.querySelector('.attack-description').value = attack.description || '';
       attackDiv.querySelector('.attack-icon').value = attack.icon || '';
       attackDiv.querySelector('.attack-type').value = attack.type || '';
       attackDiv.querySelector('.attack-range').value = attack.range || '';
@@ -245,9 +244,10 @@ function showPage(pageid) {
   const target = document.getElementById(pageid);
   if (!target) {
     console.warn(`showPage: no element with id "${pageid}" found`);
-    return;
+    pageid = 'mainPage'
   }
-  switch (pageid) {
+  try {
+    switch (pageid) {
     case 'mainPage':
       populateModList();
       selectedMod = null;
@@ -264,10 +264,21 @@ function showPage(pageid) {
     case 'erasPage':
       populateEraList();
       break;
+    case 'qualitiesPage':
+      populateQualities();
+      break;
     case 'modDetailsPage':
       document.getElementById('modName').innerText = localStorage.getItem('selectedMod') || 'No Mod Selected';
   }
-  target.hidden = false;
+  } catch (error) {
+    showPage('mainPage')
+    console.error(error);
+    
+  }
+  
+  if (target){
+    target.hidden = false;
+  }
   localStorage.setItem('lastPage', pageid);
 }
 
@@ -290,11 +301,8 @@ function addAttack() {
     <label>Name:</label>
     <input type="text" class="attack-name" placeholder="Sword">
     <br>
-    <label>Description:</label>
-    <input type="text" class="attack-description" placeholder="A sharp blade">
-    <br>
-    <label>Icon:<button type="button" class="info-icon" onclick="openModal('Attack Icon Information', attacksData, 'attackIconInput')" title="View Attack Icon information">ℹ️</button></label>
-    <input type="text" id="attackIconInput" class="attack-icon" placeholder="attacks/sword.png">
+    <label>Icon:<button type="button" class="info-icon" onclick="openModal('Attack Icon Information', attacksData, 'attackIconInput_${attackId}')" title="View Attack Icon information">ℹ️</button></label>
+    <input type="text" id="attackIconInput_${attackId}" class="attack-icon" placeholder="attacks/sword.png">
     <br>
     <label>Type:<button type="button" class="info-icon" onclick="openModal('Attack Types Information', attackTypesData)" title="View Attack types information">ℹ️</button></label>
     <input type="text" class="attack-type" placeholder="blade">
@@ -467,9 +475,9 @@ function addFaction(eraId) {
   div.id = id;
   div.classList.add('faction-frame');
   div.innerHTML = `
-    <h3>Faction</h3>
+    <h3 id="factionTitle_${id}" >Faction</h3>
     <label for="factionName">Name:</label>
-    <input type="text" Name="factionName" name="factionName" required>
+    <input type="text" Name="factionName" name="factionName" onchange="document.getElementById('factionTitle_${id}').textContent = this.value" required >
     <label for="factionImage">Image Path:<button type="button" class="info-icon" onclick="openUnitsModal('Add By Image', (unit) => this.parentElement.nextElementSibling.value = unit.image, true);" title="Add By Image">ℹ️</button></label>
     <input type="text" Name="factionImage" name="factionImage" placeholder="units/monsters/boar/piglet.png">
     <label for="factionType">Type:(Cosmetic)</label>
@@ -483,6 +491,154 @@ function addFaction(eraId) {
     <br>
     <button type="button" onclick="document.getElementById('${id}').remove()">Remove Faction</button>
   `;
+  container.appendChild(div);
+}
+
+function populateQualities() {
+  const container = document.querySelector('.MTContainer');
+  const containerRace = document.querySelector('.RaceContainer');
+  if (!selectedMod || !selectedMod.qualities) return;
+  
+  // Clear existing movement type frames
+  if (container) container.innerHTML = '';
+  if (containerRace) containerRace.innerHTML = '';
+  
+  // Populate movement types if they exist
+  const qualList = Object.values(selectedMod.qualities)
+  if (qualList && qualList.length > 0) {
+    qualList.forEach(quality => {
+      switch (quality.type) {
+        case 'race':
+          addRace()
+          const raceDivs = containerRace.querySelectorAll('.Race-frame');
+          const raceDiv = raceDivs[raceDivs.length - 1];
+          
+          // Fill race fields
+          let raceName = raceDiv.querySelector('[name="RaceName"]');
+          raceName.value = quality.id || '';
+          const RaceEvent = new Event('change');
+          raceName.dispatchEvent(RaceEvent);
+          raceDiv.querySelector('[name="race_description"]').value = quality.description || '';
+          raceDiv.querySelector('[name="num_traits"]').value = quality.num_traits || '';
+          raceDiv.querySelector('[name="undead_variation"]').value = quality.undead_variation || '';
+          raceDiv.querySelector('[name="male_names"]').value = quality.male_names || '';
+          raceDiv.querySelector('[name="female_names"]').value = quality.female_names || '';
+          break;
+      
+        default:
+          addMovementType();
+          const mtDivs = container.querySelectorAll('.MT-frame');
+          const mtDiv = mtDivs[mtDivs.length - 1];
+          
+          // Fill movement type fields
+          let name = mtDiv.querySelector('[name="MTName"]');
+          name.value = quality.name || '';
+          const event = new Event('change');
+          name.dispatchEvent(event);
+          mtDiv.querySelector('[name="movementCost"]').value = quality.movementCost || '';
+          mtDiv.querySelector('[name="defense"]').value = quality.defense || '';
+          mtDiv.querySelector('[name="resistances"]').value = quality.resistances || '';
+          break;
+      }
+      
+    });
+  }
+}
+
+function addMovementType(){
+  const container = document.querySelector('.MTContainer');
+  const id = `MT_${Date.now()}_${Math.random().toString(36).slice(2,6)}`;
+  const div = document.createElement('div');
+  div.id = id;
+  div.classList.add('MT-frame');
+  div.innerHTML = `
+    <h3 id="MTTitle_${id}">Movement Type</h3>
+    <label for="MTName">Name:</label>
+    <input type="text" Name="MTName" name="MTName" onchange="document.getElementById('MTTitle_${id}').textContent = 'MT:' + this.value" required>
+    <label for="movementCost">Movement Costs:<button type="button" class="info-icon" onclick="openModal('Movement cost Information', MCData)" title="Add By Image">ℹ️</button></label>
+    <textarea Name="movementCost" name="movementCost" rows="16" cols="50">
+deep_water=
+shallow_water=
+reef=
+swamp_water=
+flat=
+sand=
+forest=
+hills=
+mountains=
+village=
+castle=
+cave=
+frozen=
+unwalkable=
+impassable=
+fungus=</textarea>
+<label for="defense">Defense:<button type="button" class="info-icon" onclick="openModal('Defense Information', MDData)" title="Add By Image">ℹ️</button></label>
+    <textarea Name="defense" name="defense" rows="16" cols="50">
+deep_water=
+shallow_water=
+reef=
+swamp_water=
+flat=
+sand=
+forest=
+hills=
+mountains=
+village=
+castle=
+cave=
+frozen=
+unwalkable=
+impassable=
+fungus=</textarea>
+<label for="resistances">Resistances:<button type="button" class="info-icon" onclick="openModal('resistances Information', MRData)" title="Add By Image">ℹ️</button></label>
+    <textarea Name="resistances" name="resistances" rows="6" cols="50">
+blade=
+pierce=
+impact=
+fire=
+cold=
+arcane=</textarea>
+    <button type="button" onclick="deleteContainer('${id}', 'MTName')">Remove Movemnent Type</button>
+  `
+  container.appendChild(div);
+
+}
+
+function addRace(){
+  const container = document.querySelector('.RaceContainer');
+  const id = `Race_${Date.now()}_${Math.random().toString(36).slice(2,6)}`;
+  const div = document.createElement('div');
+  div.id = id;
+  div.classList.add('Race-frame');
+  let inner
+  inner = `
+    <h3 id="RaceTitle_${id}">Race</h3>
+    <label for="RaceName">Name:</label>
+    <input type="text" Name="RaceName" name="RaceName" onchange="document.getElementById('RaceTitle_${id}').textContent = 'Race:' + this.value" required>
+    <label for="race_description">Description:</label>
+    <textarea Name="race_description" name="race_description" rows="6" cols="50"></textarea>
+    <label for="num_traits">Number of traits:</label>
+    <input Name="num_traits" name="num_traits" type="number" value=2>
+    <label for="undead_variation">Undead Varition:</label>
+    <select Name="undead_variation" name="undead_variation" type="text" class="attack-range">
+    <option value="">Human default</option>`
+    
+    for (let undead of ['bug', 'scorpion', 'dwarf', 'goblin', 'troll', 'spider', 'defend', 'gryphon', 'boar', 'fish', 'rat', 'beastrider', 'wose', 'falcon', 'drake', 'wolf', 'saurian', 'serpent', 'swimmer', 'ant', 'bat', 'horse']){
+      inner += `
+      <option value="${undead}">${undead}</option>
+      `
+      }
+      
+    inner +=`
+    </select>
+    <label for="male_names">Male Names:</label>
+    <input Name="male_names" name="male_names" type="text" placeholder="name1,name2,name3">
+    <label for="female_names">Female Names:</label>
+    <input Name="female_names" name="female_names" type="text" placeholder="name1,name2,name3">
+    <button type="button" onclick="deleteContainer('${id}', 'RaceName')">Remove Race</button>
+    `
+    div.innerHTML = inner
   container.appendChild(div);
 }
 
@@ -552,6 +708,79 @@ function saveEra() {
   alert('Eras saved:', eras);
 }
 
+function deleteContainer(id, name){
+  const div = document.getElementById(id)
+  const Ename = div.querySelector('[name="'+name+'"]')
+  if (Ename) {
+    delete selectedMod.qualities[Ename] 
+  }
+  div.remove()
+}
+
+function saveQualities(){
+  const container = document.querySelector('.MTContainer');
+  const qualities = {};
+  if (container && selectedMod) {
+    
+    // Iterate through each movement type div
+    container.querySelectorAll('.MT-frame').forEach(mtDiv => {
+      const mtName = mtDiv.querySelector('[name="MTName"]').value;
+      
+      if (!mtName) return; // Skip empty movement types
+      
+      // Parse movement costs
+      const movementCostText = mtDiv.querySelector('[name="movementCost"]').value || '';
+      const defenseText = mtDiv.querySelector('[name="defense"]').value || '';
+      const resistancesText = mtDiv.querySelector('[name="resistances"]').value || '';
+      
+      const movementType = {
+        name: mtName,
+        type: 'mt'
+      };
+      
+      if (movementCostText.length > 0) movementType.movementCost = movementCostText;
+      if (defenseText.length > 0) movementType.defense = defenseText;
+      if (resistancesText.length > 0) movementType.resistances = resistancesText;
+      
+      qualities[mtName] = movementType;
+    });
+
+  }
+  
+  const raceContainer = document.querySelector('.RaceContainer');
+  if (raceContainer && selectedMod){
+    raceContainer.querySelectorAll('.Race-frame').forEach(raceDiv =>{
+      const mtName = raceDiv.querySelector('[name="RaceName"]').value;
+      
+      if (!mtName) return; // Skip empty movement types
+
+      const description = raceDiv.querySelector('[name="race_description"]').value || '';
+      const num_traits = raceDiv.querySelector('[name="num_traits"]').value || '';
+      const undead_variation = raceDiv.querySelector('[name="undead_variation"]').value || '';
+      const male_names = raceDiv.querySelector('[name="male_names"]').value || '';
+      const female_names = raceDiv.querySelector('[name="female_names"]').value || '';
+
+      const race = {
+        id: mtName,
+        type: 'race'
+      }
+
+      if (description.length > 0) race.description = description;
+      race.num_traits = num_traits;
+      if (undead_variation.length > 0) race.undead_variation = undead_variation;
+      if (male_names.length > 0) race.male_names = male_names;
+      if (female_names.length > 0) race.female_names = female_names;
+
+      qualities[mtName] = race;
+    })
+  }
+  selectedMod.qualities = qualities
+  
+  // Persist to localStorage
+  localStorage.setItem('data', JSON.stringify(data));
+  alert('Qualities saved');
+}
+
 // Handle unit form submission
 document.addEventListener('DOMContentLoaded', function() {
   const unitForm = document.getElementById('UnitForm');
@@ -562,7 +791,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Collect form data
       const formData = new FormData(unitForm);
       const newUnit = {
-        id: formData.get('unitName'),
+        id: `${selectedMod.name}_${formData.get('unitName').replaceAll(' ', "_")}`,
         name: formData.get('unitName'),
         race: formData.get('unitRace') || null,
         unitDefaultAnimation: formData.get('unitDefaultAnimation') || null,
@@ -591,7 +820,6 @@ document.addEventListener('DOMContentLoaded', function() {
           .filter(line => line);
         const attack = {
           name: attackDiv.querySelector('.attack-name').value || null,
-          description: attackDiv.querySelector('.attack-description').value || null,
           icon: attackDiv.querySelector('.attack-icon').value || null,
           type: attackDiv.querySelector('.attack-type').value || null,
           range: attackDiv.querySelector('.attack-range').value || null,

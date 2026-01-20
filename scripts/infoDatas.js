@@ -139,6 +139,36 @@ window.addEventListener('click', function (event) {
   }
 });
 
+function getYourRaces() {
+  if (!selectedMod.qualities) {
+    return {}
+  }
+  const result = Object.values(selectedMod.qualities).filter((q)=> q.type === "race").map(q => q.id)
+  if (result) {
+    return {
+      name: "Your races",
+      children: result
+    }
+  } else {
+    return {}
+  }
+};
+
+function getYourMT(){
+  if (!selectedMod.qualities) {
+    return {}
+  }
+  const result = Object.values(selectedMod.qualities).filter((q)=> q.type === "mt").map(q => q.name)
+  if (result) {
+    return {
+      name: "Your Movement Types",
+      children: result
+    }
+  } else {
+    return {}
+  }
+}
+
 // Races data structure
 const racesData = [
   {
@@ -170,11 +200,30 @@ const racesData = [
 
 const movementTypesData = [
   {
-    name: 'Default Movement Types',
+    name: 'Default Movement Types <a href="https://wiki.wesnoth.org/Movement_types" target="_blank">wiki</a>',
     children: [
       'dunearmoredfoot', 'swimmer', 'dunefoot', 'undeadfly', 'dunehorse', 'dunearmoredhorse', 'armoredfoot', 'orcishfoot', 'woodland', 'deepsea', 'naga', 'float', 'gruefoot', 'dwarvishfoot', 'woodlandfloat', 'duneelusivefoot', 'drakeglide', 'rodentfoot', 'scuttlefoot', 'lightfly', 'treefolk', 'fly', 'undeadspirit', 'smallfly', 'drakefoot', 'largefoot', 'lizard', 'undeadfoot', 'elusivefoot', 'smallfoot', 'mounted', 'spirit', 'drakefly', 'drakeglide2', 'none', 'mountainfoot'
     ]
   }
+]
+
+const MCData = [
+  'The movement cost can be a value greater or equal to 1 and it is the amound of movement points it will cost to traverse the given terrain.', 
+  '{UNREACHABLE} can be used to define terrains it can not traverse example:',
+  'deep_water={UNREACHABLE}'
+]
+
+const MDData = [
+  'The defense on each tile is the the probability of being hit in each type of tyle so a 0 would mean it has 100% to doge the attack a value of 10 a 90% change to doge, and so on...',
+  'Example:',
+  'deep_water=80 -> Means it only has a 20% to doge, so 80% of the attacks will hit the unit while in this type of tyle'
+]
+
+const MRData = [
+  'The default resistances units with this movement type will have, where the value is the multiplyier applied in %',
+  'Example:',
+  'blade=80 -> Means it will only recieve 80% of the damage from blade units, or in other terms that it will have a 20% resistance',
+  'arcane=120 -> Meas it will take 120% of the damage from arane or in other terms it takes 20% more damage'
 ]
 
 const alignmentTypesData = [

@@ -24,20 +24,19 @@ function downloadFolderAsZip(folderName, files) {
   });
 }
 
+// Helper to format a simple key=value pair with proper indentation
+function addAttribute(key, value, indent = '    ') {
+  if (value === null || value === undefined || value === '') return '';
+  
+  let formattedValue = value;
+  if (typeof value === 'string' && value.includes(' ') && !value.startsWith('_')) {
+    formattedValue = `"${value}"`;
+  }
+  return `${indent}${key}=${formattedValue}\n`;
+}
 
 function eraToWesnothString(eras) {
-  let result = '#textdomain wesnoth-my_first_campaign\n';
-  
-  // Helper to format a simple key=value pair with proper indentation
-  function addAttribute(key, value, indent = '    ') {
-    if (value === null || value === undefined || value === '') return '';
-    
-    let formattedValue = value;
-    if (typeof value === 'string' && value.includes(' ') && !value.startsWith('_')) {
-      formattedValue = `"${value}"`;
-    }
-    return `${indent}${key}=${formattedValue}\n`;
-  }
+  let result = `#textdomain wesnoth-${selectedMod.name}\n`;
   
   // Process each era
   eras.forEach(era => {
@@ -101,6 +100,71 @@ function eraToWesnothString(eras) {
   return result;
 }
 
+function qualitiesToWesnothString(qualities) {
+  let result = `#textdomain wesnoth-${selectedMod.name}\n[units]\n`;
+  
+  Object.values(qualities).forEach((quality) => {
+    type = quality.type === "mt" ? "movetype" : quality.type
+    result += ` [${type}]\n`
+    switch (type) {
+      case 'movetype':
+        result += addAttribute('name', quality.name);
+        
+        // Movement costs
+        if (quality.movementCost && Object.keys(quality.movementCost).length > 0) {
+          result += `    [movement_costs]\n     ${quality.movementCost}\n    [/movement_costs]\n`;
+        }
+        
+        // Defense
+        if (quality.defense && Object.keys(quality.defense).length > 0) {
+          result += `    [defense]\n     ${quality.defense}\n    [/defense]\n`;
+
+        }
+        
+        // Resistances
+        if (quality.resistances && Object.keys(quality.resistances).length > 0) {
+          result += `    [resistance]\n     ${quality.resistances}\n    [/resistance]\n`;
+
+        }
+        break;
+        
+      case 'race':
+        result += addAttribute('id', quality.id);
+        result += addAttribute('name', `_ "${quality.name || quality.id}"`);
+        result += addAttribute('plural_name', `_ "race^${quality.name || quality.id}s"`);
+        
+        if (quality.description) {
+          result += addAttribute('description', `_ "${quality.description}"`);
+        }
+        
+        if (quality.num_traits) {
+          result += addAttribute('num_traits', quality.num_traits);
+        }
+        
+        if (quality.undead_variation) {
+          result += addAttribute('undead_variation', quality.undead_variation);
+        }
+        
+        // Male names
+        if (quality.male_names) {
+          result += addAttribute('male_names', `_ "${quality.male_names}"`);
+        }
+
+        // Female names
+        if (quality.female_names) {
+          result += addAttribute('female_names', `_ "${quality.female_names}"`);
+        }
+        
+         
+        break;
+    }
+    result += ` [/${type}]\n`
+  })
+  result += '\n[/units]\n'
+
+  return result
+}
+
 function downloadMod(modData) {
   main = `[textdomain]
     name="wesnoth-${modData.name}"
@@ -142,12 +206,16 @@ function downloadMod(modData) {
   if (modData.units && Object.keys(modData.units).length > 0) {
     main += `\n[units]
   {~add-ons/${modData.name}/units}
-[/units]`
+[/units]\n`
     const unitFiles = Object.values(modData.units).map(unit => {
       const unitString = unitToWesnothString(unit);
       return { name: `units/${unit.id.replaceAll(' ', '_')}.cfg`, content: unitString };
     });
     files.push(...unitFiles);
+  }
+  if (selectedMod.qualities) {
+    files.push({ name: '_units.cfg', content: qualitiesToWesnothString(selectedMod.qualities)});
+    main +=`{~add-ons/${modData.name}/_units.cfg}\n`
   }
   files.push({ name: '_main.cfg', content: main });
   files.push({ name: 'modExport.json', content: JSON.stringify(modData) });
@@ -168,6 +236,7 @@ function importModData() {
   }
 }
 
+//deprecated needs to be updated to fill other types of fields
 function parseWesnothUnit(unitString) {
   const unit = {};
   
@@ -368,7 +437,7 @@ function unitToWesnothString(unit) {
     if (value === null || value === undefined) return '';
     
     let formattedValue = value;
-    if (typeof value === 'string' && value.includes(' ')) {
+    if (typeof value === 'string' && value.includes(' ') && !value.startsWith('_')) {
       formattedValue = `"${value}"`;
     }
     return `${indent}${key}=${formattedValue}\n`;
@@ -378,7 +447,6 @@ function unitToWesnothString(unit) {
   result += addAttribute('id', unit.id);
   result += addAttribute('name', unit.name);
   result += addAttribute('race', unit.race);
-  result += addAttribute('unitDefaultAnimation', unit.unitDefaultAnimation);
   result += addAttribute('image', unit.image);
   result += addAttribute('profile', unit.profile);
   result += addAttribute('hitpoints', unit.hitpoints);
@@ -389,7 +457,7 @@ function unitToWesnothString(unit) {
   result += addAttribute('alignment', unit.alignment);
   result += addAttribute('advances_to', unit.advances_to);
   result += addAttribute('cost', unit.cost);
-  result += addAttribute('description', unit.description);
+  result += addAttribute('description', `_ "${unit.description}"`);
   result += addAttribute('usage', unit.usage);
   result += addAttribute('die_sound', unit.die_sound);
   
@@ -416,7 +484,7 @@ function unitToWesnothString(unit) {
     unit.attacks.forEach(attack => {
       result += '    [attack]\n';
       result += addAttribute('name', attack.name, '        ');
-      result += addAttribute('description', attack.description, '        ');
+      result += addAttribute('description', `_ "${attack.name}"`, '        ');
       result += addAttribute('icon', attack.icon, '        ');
       result += addAttribute('type', attack.type, '        ');
       result += addAttribute('range', attack.range, '        ');

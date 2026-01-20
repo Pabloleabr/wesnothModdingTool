@@ -393,7 +393,7 @@ video {
     gap: 10px;
 }
 
-.faction-frame {
+.faction-frame, .MT-frame, .Race-frame{
     display: flex;
     flex-direction: column;
     gap: 8px;

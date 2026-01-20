@@ -79,6 +79,9 @@
                     <button onclick="showPage('unitsPage'); populateUnitList()">👥 Units</button>
                 </li>
                 <li>
+                    <button onclick="showPage('qualitiesPage');">💪 Qualities</button>
+                </li>
+                <li>
                     <button onclick="downloadMod(selectedMod);">📦 Download Mod</button>
                 </li>
                 <li>
@@ -89,12 +92,22 @@
         <div id="erasPage" class="page" hidden="true">
             <h2>🏛️ Eras</h2> 
                 <p>Make your eras each Era is a collection of factions you can play with, and each faction a collection of units.</p>
-                <button onclick="showPage('modDetailsPage')">🔙 Back</button>
-                <br>
-                <button onclick="addEraFrame()">➕ Add Era</button>
+                <ul>
+                    <button onclick="showPage('modDetailsPage')">🔙 Back</button>
+                    <br>
+                    <button onclick="addEraFrame()">➕ Add Era</button>
+                    <br>
+                    <button onclick="saveEra()">📜 Save Eras</button>
+                </ul>
                 <div id="eraFramesContainer"></div>
                 <br>
-                <button onclick="saveEra()">📜 Save Eras</button>
+                <ul>
+                    <button onclick="saveEra()">📜 Save Eras</button>
+                    <br>
+                    <button onclick="addEraFrame()">➕ Add Era</button>
+                    <br>
+                    <button onclick="showPage('modDetailsPage')">🔙 Back</button>
+                </ul>
                 
 
 
@@ -109,15 +122,39 @@
             <ul id="unitsList">
             </ul>
         </div>
+        <div id="qualitiesPage" class="page" hidden="true">
+            <h2>Qualities</h2>
+            <p>In here you will define generic attributes that multiple units will use like race & movent type</p>
+            <ul style="gap:10px;">
+                <button onclick="showPage('modDetailsPage')">🔙 Back</button>
+                <button onclick="addMovementType()">➕ Add movent type</button>
+                <button onclick="addRace()">➕ Add race</button>
+                <button onclick="saveQualities()">📜 Save Qualities</button>
+            </ul>
+            <div class="RaceContainer"></div>
+            <br>
+            <div class="MTContainer"></div>
+            <br>
+            <ul style="gap:10px;">
+                <button onclick="showPage('modDetailsPage')">🔙 Back</button>
+                <button onclick="addMovementType()">➕ Add movent type</button>
+                <button onclick="addRace()">➕ Add race</button>
+                <button onclick="saveQualities()">📜 Save Qualities</button>
+            </ul>
+
+        </div>  
         <div id="UnitPage" class="page" hidden="true">
             <h2>👥 Unit</h2> 
             <p>Create your custom unit using a default animation or by making your own</p>
             <button onclick="showPage('unitsPage')">🔙 Back</button>
+            <br>
+            <br>
             <form id="UnitForm">
+                <button type="submit">✅ Save Unit</button>
                 <h3>📋 Basic Info</h3>
                 <label for="unitName">Name:(unique!)</label>
                 <input type="text" id="unitName" name="unitName" required>
-                <label for="unitRace">Race:<button type="button" class="info-icon" onclick="openModal('Default Races Information', racesData)" title="View races information">ℹ️</button></label>
+                <label for="unitRace">Race:<button type="button" class="info-icon" onclick="openModal('Races Information', [...racesData, getYourRaces()])" title="View races information">ℹ️</button></label>
                 <input type="text" id="unitRace" name="unitRace">
                 <label for="unitDefaultAnimation">Use default animation:<button type="button" class="info-icon" onclick="openUnitsModal('Select By Image', unitAnimDefaultClick)" title="Select By Image">ℹ️</button></label>
                 <select type="text" class="attack-range" id="unitDefaultAnimation" name="unitDefaultAnimation" placeholder="No" onchange="unitAnimDefaultClick(this.value)">
@@ -131,7 +168,7 @@
                 <input type="number" id="unitHitpoints" name="unitHitpoints">
                 <label for="unitMovement">🚶 Movement:</label>
                 <input type="number" id="unitMovement" name="unitMovement">
-                <label for="unitMovementType">Movement Type:<button type="button" class="info-icon" onclick="openModal('Movement Types Information', movementTypesData)" title="View movement types information">ℹ️</button></label>
+                <label for="unitMovementType">Movement Type:<button type="button" class="info-icon" onclick="openModal('Movement Types Information', [getYourMT(),...movementTypesData])" title="View movement types information">ℹ️</button></label>
                 <input type="text" id="unitMovementType" name="unitMovementType">
                 <label for="unitCost">💰 Cost:</label>
                 <input type="number" id="unitCost" name="unitCost">
@@ -201,7 +238,7 @@
         </noscript>
         <footer>
             <div>
-                <p style="margin-right: 4px;">WMT - Wesnoth Modding Tool V 0.1.5</p>
+                <p style="margin-right: 4px;">WMT - Wesnoth Modding Tool V 0.2.0</p>
                 <a href="https://github.com/Pabloleabr/wesnothModdingTool" target="_blank">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" class="bi bi-github" viewBox="0 0 16 16">
                         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
