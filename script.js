@@ -26,16 +26,28 @@ function populateListBase(listId, items, onClick, deleteFunc) {
   }
   list.innerHTML = '';
   items.forEach((mod, index) => {
-    let li = document.createElement('li');
+    const li = document.createElement('li');
+    const copy = document.createElement('button');
     if (mod.image) {
       const img = document.createElement('img');
       img.src = 'imgs/' + mod.image;
       img.style.width = '72px';
       img.style.margin = '-8px';
       li.appendChild(img);
+      copy.innerText = '📝'
+      copy.title = "copy"
+      copy.classList.add('trash-button')
+      copy.onclick = () => {
+        const unitCopy = structuredClone(mod) 
+        unitCopy.id = mod.id + "(copy)"
+        unitCopy.name = mod.name + "(copy)"
+        selectedMod.units[unitCopy.id] = unitCopy
+        localStorage.setItem('data', JSON.stringify(data))
+        showPage('unitsPage')
+      }
     }
-    let button = document.createElement('button');
-    let trash = document.createElement('button');
+    const button = document.createElement('button');
+    const trash = document.createElement('button');
     trash.innerText = '🗑️';
     trash.classList.add('trash-button');
     trash.onclick = () => deleteFunc(mod);
@@ -44,6 +56,7 @@ function populateListBase(listId, items, onClick, deleteFunc) {
     // or create a page with id "modDetailsPage" in your HTML.
     button.onclick = () => onClick(mod);
     li.appendChild(button);
+    if (copy.innerText) li.appendChild(copy);
     li.appendChild(trash);
     list.appendChild(li);
   });
@@ -99,7 +112,7 @@ function populateUnitForm() {
   document.getElementById('unitLevel').value = selectedUnit.level || '';
   document.getElementById('unitExperience').value = selectedUnit.experience || '';
   document.getElementById('unitAlignment').value = selectedUnit.alignment || '';
-  document.getElementById('unitAdvancesTo').value = selectedUnit.advances_to || '';
+  document.getElementById('unitAdvancesTo').value = selectedUnit.advances_to || 'null';
   document.getElementById('unitDescription').value = selectedUnit.description || '';
   document.getElementById('unitUsage').value = selectedUnit.usage || '';
   document.getElementById('unitDieSound').value = selectedUnit.die_sound || '';
@@ -214,6 +227,7 @@ function populateEraList() {
       name.dispatchEvent(event);
       eraDiv.querySelector('[name="defaultFactions"]').checked = era.defaultFactions || false;
       eraDiv.querySelector('[name="defaultAoHFactions"]').checked = era.defaultAoHFactions || false;
+      eraDiv.querySelector('[name="extraAbilities"]').checked = era.extraAbilities || false;
       
       // Populate factions
       if (era.factions && era.factions.length > 0) {
@@ -319,8 +333,8 @@ function addAttack() {
     <label>Number of Attacks:</label>
     <input type="number" class="attack-number" placeholder="2">
     <br>
-    <label for="attackAbilities">Abilities 
-    (one per line):<button type="button" class="info-icon" onclick="openModal('Attack Ability Information', attackSpecialsData)" title="View Attack Ability information">ℹ️</button></label>
+    <label for="attackAbilities">Abilities (one per line):
+    <button type="button" class="info-icon" onclick="openModal('Attack Ability Information', [...attackSpecialsData, ...extraAbilititesData])" title="View Attack Ability information">ℹ️</button></label>
     <textarea id="attackAbilities" name="attackAbilities" placeholder="{WEAPON_SPECIAL_MAGICAL}" class="attack-abilities" ></textarea>
     <br>
     <button type="button" onclick="removeAttack('${attackId}')">Remove Attack</button>
@@ -458,6 +472,11 @@ function addEraFrame() {
     <br>
     <label for="defaultAoHFactions">Add default AoH factions:</label>
     <input type="checkbox" id="defaultAoHFactions" name="defaultAoHFactions">
+    <br>
+    <label for="extraAbilities">Add extra abilities:</label>
+    <input type="checkbox" id="extraAbilities" name="extraAbilities">
+    <button type="button" class="info-icon" onclick="openModal('Additional abilitites added', extraAbilititesData)" title="Extra abilitites info">ℹ️</button>
+    <br>
     <div class="factionContainer"></div>
 
     <button type="button" style="margin: 6px 0;" onclick="addFaction('${id}')">Add Faction</button>
@@ -497,11 +516,11 @@ function addFaction(eraId) {
 function populateQualities() {
   const container = document.querySelector('.MTContainer');
   const containerRace = document.querySelector('.RaceContainer');
-  if (!selectedMod || !selectedMod.qualities) return;
-  
   // Clear existing movement type frames
   if (container) container.innerHTML = '';
   if (containerRace) containerRace.innerHTML = '';
+  if (!selectedMod || !selectedMod.qualities) return;
+  
   
   // Populate movement types if they exist
   const qualList = Object.values(selectedMod.qualities)
@@ -654,6 +673,7 @@ function saveEra() {
     const eraId = eraName;
     const defaultFactions = eraDiv.querySelector('[name="defaultFactions"]').checked;
     const defaultAoHFactions = eraDiv.querySelector('[name="defaultAoHFactions"]').checked;
+    const extraAbilities = eraDiv.querySelector('[name="extraAbilities"]').checked;
     
     if (!eraId || !eraName) return; // Skip empty eras
     
@@ -690,6 +710,7 @@ function saveEra() {
       name: eraName,
       defaultFactions: defaultFactions,
       defaultAoHFactions: defaultAoHFactions,
+      extraAbilities: extraAbilities,
       factions: factions
     };
     
@@ -708,11 +729,12 @@ function saveEra() {
   alert('Eras saved:', eras);
 }
 
+// TODO: FIX
 function deleteContainer(id, name){
   const div = document.getElementById(id)
   const Ename = div.querySelector('[name="'+name+'"]')
-  if (Ename) {
-    delete selectedMod.qualities[Ename] 
+  if (selectedMod.qualities && Object.keys(selectedMod.qualities).includes(Ename.value)) {
+    delete selectedMod.qualities[Ename.value] 
   }
   div.remove()
 }

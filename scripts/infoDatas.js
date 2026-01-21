@@ -168,7 +168,6 @@ function getYourMT(){
     return {}
   }
 }
-
 // Races data structure
 const racesData = [
   {
@@ -213,8 +212,15 @@ const MCData = [
   'deep_water={UNREACHABLE}'
 ]
 
+const extraAbilititesData = [
+  {
+    name: 'The following abilities will usable if selected for the era (<a href="https://wiki.wesnoth.org/WML_Abilities">wiki</a>):',
+    children: ['{WEAPON_SPECIAL_KNOCKBACK}', '{WEAPON_SPECIAL_BLOODLUST}', '{WEAPON_SPECIAL_CHARM}', '{WEAPON_SPECIAL_MIND_FLAY}', '{WEAPON_SPECIAL_PICKPOCKET}', '{WEAPON_SPECIAL_SOULTAKER}', '{WEAPON_SPECIAL_WHIRLWIND}']
+  }
+]
+
 const MDData = [
-  'The defense on each tile is the the probability of being hit in each type of tyle so a 0 would mean it has 100% to doge the attack a value of 10 a 90% change to doge, and so on...',
+  'The defense on each tile is the the probability of being hit in each type of tyle so a 0 would mean it has 100% to doge the attack, a value of 10 a 90% change to doge, and so on...',
   'Example:',
   'deep_water=80 -> Means it only has a 20% to doge, so 80% of the attacks will hit the unit while in this type of tyle'
 ]
