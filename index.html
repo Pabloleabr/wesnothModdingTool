@@ -103,7 +103,6 @@
                     <button onclick="saveEra()">📜 Save Eras</button>
                 </ul>
                 <div id="eraFramesContainer"></div>
-                <br>
                 <ul>
                     <button onclick="saveEra()">📜 Save Eras</button>
                     <br>
@@ -120,7 +119,15 @@
             <ul>
                 <li><button onclick="showPage('modDetailsPage')">🔙 Back</button></li>
                 <li><button onclick=" selectedUnit = {}; showPage('UnitPage');">✨ Create New Unit</button></li>
-
+                <li><p for="folderInput">Select your images folder to load custom sprites during the session (needs reimport on page reload)</p></li>
+                <li style="display: flex; justify-content: center;"><input
+                    type="file"
+                    name="folderInput"
+                    id="folderInput"
+                    webkitdirectory
+                    multiple
+                    accept="images/*"
+                /></li>
             </ul>
             <ul id="unitsList">
             </ul>
@@ -151,6 +158,7 @@
             <p>Create your custom unit using a default animation or by making your own</p>
             <button onclick="showPage('unitsPage')">🔙 Back</button>
             <br>
+            
             <br>
             <form id="UnitForm">
                 <button type="submit">✅ Save Unit</button>
@@ -172,7 +180,8 @@
                 <label for="unitMovement">🚶 Movement:</label>
                 <input type="number" id="unitMovement" name="unitMovement">
                 <label for="unitMovementType">Movement Type:<button type="button" class="info-icon" onclick="openModal('Movement Types Information', [getYourMT(),...movementTypesData])" title="View movement types information">ℹ️</button></label>
-                <input type="text" id="unitMovementType" name="unitMovementType">
+                <select id="unitMovementType" name="unitMovementType">
+                </select>
                 <label for="unitCost">💰 Cost:</label>
                 <input type="number" id="unitCost" name="unitCost">
                 <label for="unitLevel">📊 Level:</label>
@@ -180,14 +189,19 @@
                 <label for="unitExperience">⭐ Experience for level up:</label>
                 <input type="number" id="unitExperience" name="unitExperience">
                 <label for="unitAlignment">⚖️ Alignment:<button type="button" class="info-icon" onclick="openModal('Alignment Types Information', alignmentTypesData)" title="View Alignment types information">ℹ️</button></label>
-                <input type="text" id="unitAlignment" name="unitAlignment">
+                <select name="unitAlignment" id="unitAlignment" selected="neutral">
+                    <option value="neutral">Nuetral</option>
+                    <option value="chaotic">Chaotic</option>
+                    <option value="lawful">Lawful</option>
+                    <option value="liminal">Liminal</option>
+                </select>
                 <label for="unitAdvancesTo" title="the unit it will advance to when leveling up">📈 Advances To:<button type="button" class="info-icon" onclick="openUnitsModal('Units by image', fillField, true)" title="View units by img">ℹ️</button></label>
                 <input type="text" id="unitAdvancesTo" name="unitAdvancesTo" value="null">
                 <label for="unitDescription">📖 Description:</label>
                 <textarea id="unitDescription" name="unitDescription"></textarea>
                 <label for="unitUsage" title="">🎯 Usage:<button type="button" class="info-icon" onclick="openModal('Default Usage Info', usageData)" title="View Usage information">ℹ️</button></label>
                 <input type="text" id="unitUsage" name="unitUsage">
-                <label for="unitDieSound">🔊 Die Sound:<button type="button" class="info-icon" onclick="openModal('Die Sounds Information', dieSoundsData)" title="View Die Sounds information">ℹ️</button></label>
+                <label for="unitDieSound">🔊 Die Sound:<button type="button" class="info-icon" onclick="openModal('Die Sounds Information', SoundsData)" title="View Die Sounds information">ℹ️</button></label>
                 <input type="text" id="unitDieSound" name="unitDieSound">
 
                 <h3 id="attackTitle">⚡ Attacks</h3>
@@ -229,11 +243,72 @@
                     <button type="button" onclick="addAttackAnim()">➕ Add Attack Animation</button>
                     <br>
                 </details>
-
+                <label for="codeBlock">Custom WML code</label>
+                <textarea id="codeBlock" name="codeBlock" placeholder="Here you can place extra WML code to be added in addition to all the defined atributes, it will be placed within unit_type tags" ></textarea>
                 <button type="submit">✅ Save Unit</button>
                 <br>
             </form>
             
+        </div>
+
+        <!-- Side Panel: Unit Info -->
+        <div id="unitInfoPanel" class="unit-info-panel">
+            <h3 style="margin-top: 0; text-align: center;">⚔️ View</h3>
+            <div style="display:flex; justify-content: space-between; margin: -18px 0px 0px 0px;">
+                <div id="panelAlingment" ></div>
+                <div class="stat-item" style="padding: 4px ; ">
+                    <span class="stat-icon">📊</span>
+                    <span id="panelLevel" class="stat-value">-</span>
+                </div>
+            </div>
+            <div id="unitImageContainer" class="unit-image-container">
+                <img id="unitDisplayImage" src="" alt="Unit Image" class="unit-display-image">
+            </div>
+            
+            <div class="unit-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">❤️</span>
+                    <span id="panelHitpoints" class="stat-value">-</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-icon">🚶</span>
+                    <span id="panelMovement" class="stat-value">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">💰</span>
+                    <span id="panelCost" class="stat-value">-</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span id="panelExperience" class="stat-value">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><img src="imgs/resistances/blade.png" alt="blade-icon"></span>
+                    <span id="panelBlade" class="stat-value">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><img src="imgs/resistances/pierce.png" alt="pierce-icon"></span>
+                    <span id="panelPierce" class="stat-value">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><img src="imgs/resistances/impact.png" alt="impact-icon"></span>
+                    <span id="panelImpact" class="stat-value">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><img src="imgs/resistances/fire.png" alt="fire-icon"></span>
+                    <span id="panelFire" class="stat-value">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><img src="imgs/resistances/cold.png" alt="cold-icon"></span>
+                    <span id="panelCold" class="stat-value">-</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon"><img src="imgs/resistances/arcane.png" alt="arcane-icon"></span>
+                    <span id="panelArcane" class="stat-value">-</span>
+                </div>
+            </div>
         </div>
         </main>
         <noscript>
@@ -241,7 +316,7 @@
         </noscript>
         <footer>
             <div>
-                <p style="margin-right: 4px;">WMT - Wesnoth Modding Tool V 0.2.1</p>
+                <p style="margin-right: 4px;">WMT - Wesnoth Modding Tool V 0.3</p>
                 <a href="https://github.com/Pabloleabr/wesnothModdingTool" target="_blank">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" class="bi bi-github" viewBox="0 0 16 16">
                         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>

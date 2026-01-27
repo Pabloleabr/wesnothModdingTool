@@ -30,9 +30,15 @@ function populateListBase(listId, items, onClick, deleteFunc) {
     const copy = document.createElement('button');
     if (mod.image) {
       const img = document.createElement('img');
-      img.src = 'imgs/' + mod.image;
+      const newSrc = 'images/' + mod.image
+      if (loadedImgs.hasOwnProperty(newSrc)){
+        img.src = loadedImgs[newSrc]
+      } else {
+        img.src = 'imgs/' + mod.image;
+      }
       img.style.width = '72px';
       img.style.margin = '-8px';
+      img.classList.add('generatedImg')
       li.appendChild(img);
       copy.innerText = '📝'
       copy.title = "copy"
@@ -97,6 +103,15 @@ function populateUnitList() {
 
 function populateUnitForm() {
   const unitForm = document.getElementById('UnitForm');
+  const movetypeSelect = document.getElementById('unitMovementType')
+  movetypeSelect.innerHTML = ''
+  const mts = [...(getYourMT().children || []), ...movementTypesData[0].children]
+  mts.forEach((e)=> {
+   const option = document.createElement('option')
+   option.value = e
+   option.textContent = e
+   movetypeSelect.appendChild(option)
+  })
   if (!unitForm || !selectedUnit) return;
 
   // Fill basic fields
@@ -106,10 +121,10 @@ function populateUnitForm() {
   document.getElementById('unitImage').value = selectedUnit.image || '';
   document.getElementById('unitProfile').value = selectedUnit.profile || '';
   document.getElementById('unitHitpoints').value = selectedUnit.hitpoints || '';
-  document.getElementById('unitMovement').value = selectedUnit.movement || '';
+  document.getElementById('unitMovement').value = selectedUnit.movement || '0';
   document.getElementById('unitMovementType').value = selectedUnit.movement_type || '';
-  document.getElementById('unitCost').value = selectedUnit.cost || '';
-  document.getElementById('unitLevel').value = selectedUnit.level || '';
+  document.getElementById('unitCost').value = selectedUnit.cost || '0';
+  document.getElementById('unitLevel').value = selectedUnit.level || '0';
   document.getElementById('unitExperience').value = selectedUnit.experience || '';
   document.getElementById('unitAlignment').value = selectedUnit.alignment || '';
   document.getElementById('unitAdvancesTo').value = selectedUnit.advances_to || 'null';
@@ -158,6 +173,7 @@ function populateUnitForm() {
   } else {
     document.getElementById('unitAbilities').value = '';
   }
+  document.getElementById('codeBlock').value = selectedUnit.codeBlock || ''
 
   // Populate standing animation
   document.getElementById('standingAnimContainer').innerHTML = '';
@@ -200,10 +216,112 @@ function populateUnitForm() {
           const frames = lastAnim.querySelectorAll('.anim-frame');
           const lastFrame = frames[frames.length - 1];
           lastFrame.querySelector('.anim-frame-image').value = frame.image || '';
+          lastFrame.querySelector('.anim-frame-sound').value = frame.sound || '';
         });
       }
     });
   }
+}
+
+// Update unit info panel
+function updateUnitInfoPanel() {
+  const hitpoints = document.getElementById('unitHitpoints').value || '-';
+  let alingment = document.getElementById('unitAlignment').value || '-';
+  const movement = document.getElementById('unitMovement').value || '-';
+  const level = document.getElementById('unitLevel').value || '-';
+  const cost = document.getElementById('unitCost').value || '-';
+  const experience = document.getElementById('unitExperience').value || '-';
+  const imagePath = document.getElementById('unitImage').value || '';
+  const movetype = document.getElementById('unitMovementType').value
+  switch (alingment) {
+    case 'chaotic':
+      alingment = '🌒'
+      break;
+      case 'lawful':
+        alingment = '☀️'
+      break;
+      case 'neutral':
+        alingment = '⚖️'
+        break;
+        case 'liminal':
+          alingment = '🌅'
+          break;
+        }
+        // Update stat values
+  const yourMT = Object.values(selectedMod.qualities).filter((q)=> q.type === "mt" && q.name === movetype && q.resistances).map((q)=>q.resistances.split("\n"))
+  if (resistanceDict.hasOwnProperty(movetype)){
+    document.getElementById('panelBlade').textContent = String((resistanceDict[movetype].blade -100)*-1) + '%';
+    document.getElementById('panelPierce').textContent = String((resistanceDict[movetype].pierce -100)*-1) + '%';
+    document.getElementById('panelImpact').textContent = String((resistanceDict[movetype].impact -100)*-1) + '%';
+    document.getElementById('panelFire').textContent = String((resistanceDict[movetype].fire -100)*-1) + '%';
+    document.getElementById('panelCold').textContent = String((resistanceDict[movetype].cold -100)*-1) + '%';
+    document.getElementById('panelArcane').textContent = String((resistanceDict[movetype].arcane -100)*-1) + '%';
+  } else {
+    document.getElementById('panelBlade').textContent = '-'
+    document.getElementById('panelPierce').textContent = '-'
+    document.getElementById('panelImpact').textContent = '-'
+    document.getElementById('panelFire').textContent = '-'
+    document.getElementById('panelCold').textContent = '-'
+    document.getElementById('panelArcane').textContent = '-'
+    if (yourMT.length > 0) {
+      yourMT[0].forEach((r)=>{
+        const tv = r.split('=')
+        if (tv.length > 1 && attackTypesData[0].children.includes(tv[0])){
+          document.getElementById('panel'+capitalizeFirstLetter(tv[0])).textContent = String((Number(tv[1]) -100)*-1) + '%'
+        }
+      })
+    }
+  } 
+  document.querySelectorAll('.resistance-type').forEach((e) => {
+    const type = e.value
+    if (attackTypesData[0].children.includes(type)){
+      document.getElementById('panel'+capitalizeFirstLetter(type)).textContent = e.nextElementSibling.nextElementSibling.value + '%'
+    }
+  })
+  document.getElementById('panelHitpoints').textContent = hitpoints;
+  document.getElementById('panelAlingment').textContent = alingment;
+  document.getElementById('panelMovement').textContent = movement;
+  document.getElementById('panelLevel').textContent = level;
+  document.getElementById('panelCost').textContent = cost;
+  document.getElementById('panelExperience').textContent = experience;
+  // Update image
+  const unitImageElement = document.getElementById('unitDisplayImage');
+  if (imagePath) {
+    // Try to load from custom images first, then fallback to default imgs folder
+    const customPath = 'images/' + imagePath;
+    const defaultPath = 'imgs/' + imagePath;
+    unitImageElement.alt = imagePath
+    if (loadedImgs && loadedImgs.hasOwnProperty(customPath)) {
+      unitImageElement.src = loadedImgs[customPath];
+    } else {
+      unitImageElement.src = defaultPath;
+    }
+    unitImageElement.style.display = 'block';
+  } else {
+    unitImageElement.src = '';
+    unitImageElement.style.display = 'none';
+  }
+}
+
+function attachUnitPanelListeners() {
+  const fieldsToMonitor = [
+    'unitHitpoints',
+    'unitMovement',
+    'unitLevel',
+    'unitCost',
+    'unitExperience',
+    'unitImage',
+    'unitAlignment',
+    'unitMovementType'
+  ];
+
+  fieldsToMonitor.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.addEventListener('input', updateUnitInfoPanel);
+      field.addEventListener('change', updateUnitInfoPanel);
+    }
+  });
 }
 
 function populateEraList() {
@@ -260,6 +378,13 @@ function showPage(pageid) {
     console.warn(`showPage: no element with id "${pageid}" found`);
     pageid = 'mainPage'
   }
+  
+  // Hide the unit info panel by default, show only on UnitPage
+  const unitInfoPanel = document.getElementById('unitInfoPanel');
+  if (unitInfoPanel) {
+    unitInfoPanel.setAttribute('data-visible', pageid === 'UnitPage' ? 'true' : 'false');
+  }
+  
   try {
     switch (pageid) {
     case 'mainPage':
@@ -274,6 +399,8 @@ function showPage(pageid) {
       break;
     case 'UnitPage':
       populateUnitForm();
+      updateUnitInfoPanel();
+      attachUnitPanelListeners();
       break;
     case 'erasPage':
       populateEraList();
@@ -355,18 +482,24 @@ function addResistance() {
   div.style.border = '1px solid #d1ad0a';
   div.style.padding = '10px';
   div.style.margin = '10px 0';
-  div.innerHTML = `
-    <label>Type:</label>
-    <input type="text" class="resistance-type" placeholder="e.g., blade" required>
+  let html = ''
+  html = `<label>Type:</label>
+    <select type="text" class="resistance-type" placeholder="e.g., blade" required>`
+  for (let option of attackTypesData[0].children){
+    html += `<option value="${option}">${option}</option>`
+  }
+  html += ` </select>
     <label>Value:</label>
-    <input type="number" class="resistance-value" placeholder="60" required>
+    <input type="number" class="resistance-value" placeholder="60" required onchange="updateUnitInfoPanel()" oninput="updateUnitInfoPanel()">
     <button type="button" onclick="removeResistance('${resistanceId}')">Remove</button>
   `;
+  div.innerHTML = html
   container.appendChild(div);
 }
 
 function removeResistance(resistanceId) {
   document.getElementById(resistanceId).remove();
+  updateUnitInfoPanel()
 }
 // Animation helpers
 function addStandingFrame() {
@@ -429,7 +562,9 @@ function addAttackAnimFrame(animId) {
   div.style.margin = '6px 0';
   div.innerHTML = `
     <label>Image:</label>
-    <input type="text" class="anim-frame-image" placeholder="frames/frame.png">
+    <input type="text" class="anim-frame-image" placeholder="images/units/YoutUnit-1.png">
+    <label>sound:</label>
+    <input type="text" class="anim-frame-sound" placeholder=""><button type="button" class="info-icon" onclick="openModal('Sounds Information', SoundsData)" title="View Sounds information">ℹ️</button>
     <button type="button" onclick="document.getElementById('${id}').remove()">Remove</button>
   `;
   container.appendChild(div);
@@ -460,6 +595,7 @@ function addEraFrame() {
   const id = `era_${Date.now()}_${Math.random().toString(36).slice(2,6)}`;
   const div = document.createElement('div');
   div.id = id;
+  div.classList.add('eraDisplay')
   div.style.margin = '6px 0';
   div.innerHTML = `
     <h2 id="eraTitle_${id}">Era</h2>
@@ -467,6 +603,7 @@ function addEraFrame() {
     <input type="text" Name="eraName" name="eraName" onChange="document.getElementById('eraTitle_${id}').textContent = 'Era: ' + this.value;" required>
     <br>
     <br>
+    <div>
     <label for="defaultFactions">Add default factions:</label>
     <input type="checkbox" id="defaultFactions" name="defaultFactions">
     <br>
@@ -477,8 +614,13 @@ function addEraFrame() {
     <input type="checkbox" id="extraAbilities" name="extraAbilities">
     <button type="button" class="info-icon" onclick="openModal('Additional abilitites added', extraAbilititesData)" title="Extra abilitites info">ℹ️</button>
     <br>
+    </div>
     <div class="factionContainer"></div>
-
+    <br>
+    <label for="additionalCode">Additional Code: (optional for you own custom abilities):</label>
+    <br>
+    <textarea name="additionalCode" id="additionalCode" cols="50" rows="15" placeholder="If you don't know leave empty since wrong characters can break the mod"></textarea>
+    
     <button type="button" style="margin: 6px 0;" onclick="addFaction('${id}')">Add Faction</button>
     <button type="button" onclick="document.getElementById('${id}').remove()">Remove Era</button>
   `;
@@ -674,7 +816,7 @@ function saveEra() {
     const defaultFactions = eraDiv.querySelector('[name="defaultFactions"]').checked;
     const defaultAoHFactions = eraDiv.querySelector('[name="defaultAoHFactions"]').checked;
     const extraAbilities = eraDiv.querySelector('[name="extraAbilities"]').checked;
-    
+    const additionalCode = eraDiv.querySelector('[name="additionalCode"]').value;
     if (!eraId || !eraName) return; // Skip empty eras
     
     const factions = [];
@@ -711,7 +853,8 @@ function saveEra() {
       defaultFactions: defaultFactions,
       defaultAoHFactions: defaultAoHFactions,
       extraAbilities: extraAbilities,
-      factions: factions
+      factions: factions,
+      additionalCode: additionalCode
     };
     
     eras.push(era);
@@ -820,10 +963,10 @@ document.addEventListener('DOMContentLoaded', function() {
         image: formData.get('unitImage') || null,
         profile: formData.get('unitProfile') || null,
         hitpoints: formData.get('unitHitpoints') ? parseInt(formData.get('unitHitpoints')) : null,
-        movement: formData.get('unitMovement') ? parseInt(formData.get('unitMovement')) : null,
+        movement: formData.get('unitMovement') ? parseInt(formData.get('unitMovement')) : 0,
         movement_type: formData.get('unitMovementType') || null,
-        cost: formData.get('unitCost') ? parseInt(formData.get('unitCost')) : null,
-        level: formData.get('unitLevel') ? parseInt(formData.get('unitLevel')) : null,
+        cost: formData.get('unitCost') ? parseInt(formData.get('unitCost')) : 0,
+        level: formData.get('unitLevel') ? parseInt(formData.get('unitLevel')) : 0,
         experience: formData.get('unitExperience') ? parseInt(formData.get('unitExperience')) : null,
         alignment: formData.get('unitAlignment') || null,
         advances_to: formData.get('unitAdvancesTo') || null,
@@ -864,6 +1007,8 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       if (Object.keys(resistance).length > 0) newUnit.resistance = resistance;
 
+      const codeBlock = formData.get('codeBlock') || '';
+      if (codeBlock) newUnit.codeBlock = codeBlock
       // Collect abilities
       const abilitiesText = formData.get('unitAbilities') || '';
       const abilities = abilitiesText
@@ -919,7 +1064,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const frames = [];
         animDiv.querySelectorAll('.anim-frame').forEach(frameEl => {
           const img = frameEl.querySelector('.anim-frame-image').value;
-          if (img) frames.push({ image: img });
+          const sound = frameEl.querySelector('.anim-frame-sound').value;
+          const obj = {}
+          if (img) obj.image= img ;
+          if (sound) obj.sound= sound ;
+          if (obj) frames.push(obj)
         });
         if (frames.length > 0) anim.frames = frames;
 
@@ -972,6 +1121,7 @@ unitAnimDefaultClick = (unit) => {
   if (unit.movement_anim) {
     addToBlockText(unit.movement_anim);
   }
+  updateUnitInfoPanel()
 }
 // Populate unit default animations selection dropdown
 const unitAnimInput = document.getElementById('unitDefaultAnimation');

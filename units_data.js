@@ -1,3 +1,760 @@
+const resistanceDict = {
+    "smallfoot": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "orcishfoot": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 100
+    },
+    "largefoot": {
+        "blade": 80,
+        "pierce": 80,
+        "impact": 100,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 110
+    },
+    "armoredfoot": {
+        "blade": 50,
+        "pierce": 60,
+        "impact": 90,
+        "fire": 110,
+        "cold": 100,
+        "arcane": 90
+    },
+    "elusivefoot": {
+        "blade": 130,
+        "pierce": 120,
+        "impact": 120,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "mounted": {
+        "blade": 80,
+        "pierce": 120,
+        "impact": 70,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "woodland": {
+        "blade": 100,
+        "pierce": 40,
+        "impact": 60,
+        "fire": 150,
+        "cold": 100,
+        "arcane": 120
+    },
+    "lightfly": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 110,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "deepsea": {
+        "blade": 80,
+        "pierce": 100,
+        "impact": 70,
+        "fire": 100,
+        "cold": 40,
+        "arcane": 90
+    },
+    "swimmer": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 100,
+        "cold": 80,
+        "arcane": 100
+    },
+    "naga": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 100
+    },
+    "float": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 110,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 40
+    },
+    "mountainfoot": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "dwarvishfoot": {
+        "blade": 80,
+        "pierce": 80,
+        "impact": 80,
+        "fire": 90,
+        "cold": 90,
+        "arcane": 90
+    },
+    "gruefoot": {
+        "blade": 90,
+        "pierce": 70,
+        "impact": 100,
+        "fire": 90,
+        "cold": 60,
+        "arcane": 90
+    },
+    "undeadfoot": {
+        "blade": 90,
+        "pierce": 70,
+        "impact": 110,
+        "fire": 120,
+        "cold": 40,
+        "arcane": 120
+    },
+    "undeadfly": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 120,
+        "cold": 40,
+        "arcane": 120
+    },
+    "undeadspirit": {
+        "blade": 50,
+        "pierce": 50,
+        "impact": 50,
+        "fire": 90,
+        "cold": 30,
+        "arcane": 110
+    },
+    "spirit": {
+        "blade": 40,
+        "pierce": 40,
+        "impact": 40,
+        "fire": 100,
+        "cold": 30,
+        "arcane": 100
+    },
+    "lizard": {
+        "blade": 110,
+        "pierce": 80,
+        "impact": 110,
+        "fire": 120,
+        "cold": 120,
+        "arcane": 90
+    },
+    "scuttlefoot": {
+        "blade": 90,
+        "pierce": 90,
+        "impact": 30,
+        "fire": 200,
+        "cold": 120,
+        "arcane": 150
+    },
+    "rodentfoot": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 100,
+        "cold": 90,
+        "arcane": 90
+    },
+    "drakefoot": {
+        "blade": 80,
+        "pierce": 100,
+        "impact": 70,
+        "fire": 50,
+        "cold": 150,
+        "arcane": 110
+    },
+    "dunefoot": {
+        "blade": 100,
+        "pierce": 100,
+        "impact": 100,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "duneelusivef": {
+        "blade": 110,
+        "pierce": 110,
+        "impact": 110,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "dunearmoredf": {
+        "blade": 80,
+        "pierce": 80,
+        "impact": 110,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "dunehorse": {
+        "blade": 100,
+        "pierce": 120,
+        "impact": 90,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    },
+    "dunearmoredh": {
+        "blade": 80,
+        "pierce": 120,
+        "impact": 80,
+        "fire": 100,
+        "cold": 100,
+        "arcane": 90
+    }
+}
+
+const extraAbilities = `[event]
+    name=attacker hits
+    first_time_only=no
+
+    [filter_attack]
+        special_id=knockback
+    [/filter_attack]
+
+    [filter_second]
+        [not]
+            [filter_location]
+                terrain=*^V*
+            [/filter_location]
+        [/not]
+    [/filter_second]
+
+    [if]
+        [variable]
+            name=second_unit.hitpoints
+            greater_than=0
+        [/variable]
+        [then]
+            [store_locations]
+                [not]
+                    [filter]
+                    [/filter]
+                [/not]
+
+                [filter_adjacent_location]
+                    x,y=$x2,$y2
+                    adjacent=-$unit.facing
+                [/filter_adjacent_location]
+
+                variable=knockback_target_hex
+            [/store_locations]
+
+            [if]
+                [variable]
+                    name=knockback_target_hex.length
+                    greater_than=0
+                [/variable]
+
+                [then]
+                    [teleport]
+                        [filter]
+                            x,y=$x2,$y2
+                        [/filter]
+
+                        x,y=$knockback_target_hex.x,$knockback_target_hex.y
+                        ignore_passability=no
+                    [/teleport]
+
+                    [if]
+                        [have_unit]
+                            x,y=$knockback_target_hex.x,$knockback_target_hex.y
+                        [/have_unit]
+
+                        [then]
+                            [sound]
+                                name=fist.ogg
+                            [/sound]
+
+                            # the knockbacked unit doesn't seem to receive experience by default,
+                            # so we need to add it manually
+                            [store_unit]
+                                [filter]
+                                    x,y=$knockback_target_hex.x,$knockback_target_hex.y
+                                [/filter]
+
+                                kill=yes
+                                variable=knockbacked
+                            [/store_unit]
+
+                            {VARIABLE_OP knockbacked.experience add $unit.level}
+
+                            [unstore_unit]
+                                variable=knockbacked
+                                text= _ "knockback"
+                                {COLOR_HARM}
+                                advance=true
+                            [/unstore_unit]
+
+                            {CLEAR_VARIABLE knockbacked}
+                        [/then]
+                    [/if]
+                [/then]
+            [/if]
+
+            {CLEAR_VARIABLE knockback_target_hex}
+        [/then]
+    [/if]
+[/event]
+#define WEAPON_SPECIAL_KNOCKBACK
+    [dummy]
+        id=knockback
+        name= _ "knockback"
+        female_name= _ "female^knockback"
+        description=_ "When a unit is hit with a knockback attack, it is immediately pushed back one hex away from the attacker. Units cannot be knocked back into an occupied hex, out of villages or onto terrain they normally could not move to. Only works on offense."
+        active_on=offense
+    [/dummy]
+#enddef
+[event]
+    name=die
+    first_time_only=no
+
+    [filter_attack]
+        special_id=bloodlost
+    [/filter_attack]
+
+    [modify_unit]
+        [filter]
+            x,y=$x2,$y2
+        [/filter]
+        moves=0
+        attacks_left=1
+    [/modify_unit]
+[/event]
+#define WEAPON_SPECIAL_BLOODLUST
+[dummy]
+        id=bloodlost
+        name= _ "bloodlost"
+        female_name= _ "female^bloodlost"
+        description=_ "When it kills a unit it gains another attack"
+        active_on=offense
+    [/dummy]
+#enddef
+[event]
+    name=attacker hits
+    # Works only as attacker.
+    # If you want to make a weapon special for this event, set:
+    # [dummy]active_on=offense, then the engine greys out the weapon special on defense.
+    first_time_only=no
+    id=charm_as_attacker
+
+    [filter_attack]
+        special_id=charm
+        # or special_id=charm, if you create a [dummy] weapon special
+    [/filter_attack]
+
+    [filter_second]
+        # If the leader is charmed, it might end the scenario,
+        # as the other side is now considered defeated without a leader.
+        # Better exclude leaders.
+        canrecruit=no
+        # If the unit would die from the damage,
+        # we should not interfere with the event.
+        formula="self.hitpoints > 0"
+    [/filter_second]
+
+    # Charm the unit
+    # Changing the side will also immediately stop the combat and grant both units XP
+    [modify_unit]
+        [filter]
+            x,y=$x2,$y2
+        [/filter]
+        [variables]
+            # to remember the original side
+            real_side=$second_unit.side
+        [/variables]
+        [status]
+            # optional, just to easier find the unit in the other event
+            charmed=yes
+        [/status]
+        side=$unit.side
+        moves=1
+        attacks_left=1
+    [/modify_unit]
+
+    [floating_text]
+        x,y=$x2,$y2
+        # po: short text, only displayed for a moment
+        text="<span color='#ffc0cb'>" + _ "charm" + "</span>"
+    [/floating_text]
+[/event]
+
+[event]
+    name=side turn end, scenario end
+    # Releasing the unit in the same turn has a few reasons:
+    # - a charmed unit cannot be charmed again
+    # - if the scenario ends, we can still correct the ownership
+    # - things like healing by allies work the usual way
+    first_time_only=no
+    id=charm_release
+
+    [store_unit]
+        [filter]
+            side=$side_number
+            status=charmed
+        [/filter]
+        variable=charmed_units
+    [/store_unit]
+
+    [foreach]
+        array=charmed_units
+        [do]
+            {VARIABLE this_item.side $this_item.variables.real_side}
+            {CLEAR_VARIABLE this_item.variables.real_side}
+            {CLEAR_VARIABLE this_item.status.charmed}
+            [unstore_unit]
+                variable=this_item
+            [/unstore_unit]
+        [/do]
+    [/foreach]
+
+    {CLEAR_VARIABLE charmed_units}
+[/event]
+
+#define WEAPON_SPECIAL_CHARM
+    [dummy]
+        id=charm
+        name= _ "charm"
+        female_name= _ "female^charm"
+        description=_ "When a level 1 or 2 unit is hit by a charm attack, it instantly jumps to the attacker's side, and returns to its original side at the end of the turn. A charmed unit has 1 movement point and can attack."
+        apply_to=opponent
+        active_on=offense
+        [filter_opponent]
+            level=0,1
+            canrecruit=no
+        [/filter_opponent]
+    [/dummy]
+#enddef
+[event]
+    name=attacker_hits
+    first_time_only=no
+    [filter_attack]
+        special_id=weapon_pickpocket
+    [/filter_attack]
+    [store_unit]
+        [filter]
+            x,y=$x1,$y1
+        [/filter]
+        variable=unit_att_with_pickpocket
+        mode=append
+    [/store_unit]
+    [set_variable]
+        name=unit_att_with_pickpocket.variables.pickpocket_has_worked
+        value=yes
+    [/set_variable]
+    [unstore_unit]
+        variable=unit_att_with_pickpocket
+    [/unstore_unit]
+    {CLEAR_VARIABLE unit_att_with_pickpocket}
+[/event]
+[event]
+    name=attacker_hits
+    first_time_only=no
+    [filter_attack]
+        special_id=weapon_pickpocket
+    [/filter_attack]
+    [store_unit]
+        [filter]
+            x,y=$x1,$y1
+        [/filter]
+        variable=pickpocketer
+        mode=append
+    [/store_unit]   
+    [store_unit]
+        [filter]
+            x,y=$x2,$y2
+        [/filter]
+        variable=pickpocketed
+        mode=append
+    [/store_unit]
+    [if]
+        [variable]
+            name=pickpocketer.variables.pickpocket_has_worked
+            boolean_equals=yes
+        [/variable]
+        [then]
+            [gold]
+                side=$side_number
+                amount=1
+            [/gold]
+            [unstore_unit]
+                variable=pickpocketed
+                text="!"
+                {COLOR_HEAL}
+            [/unstore_unit]
+        [/then]
+    [/if]
+    {CLEAR_VARIABLE pickpocketer,pickpocketed}
+[/event]
+#define WEAPON_SPECIAL_PICKPOCKET
+[dummy]
+    id=weapon_pickpocket
+    name= _ "pickpocket"
+    description= _ "Gain money for attacking your foe. Each strike scores you one gold."
+    apply_to=opponent
+    active_on=offense
+[/dummy]
+#enddef
+[event]
+    name=die
+    first_time_only=no
+    id=soultaker
+
+    [filter]
+        [not]
+            status=undrainable
+        [/not]
+    [/filter]
+
+    # To use Soultaker as weapon special, use this check INSTEAD of the above one.
+    [filter_second_attack]
+        special_id=soultaker
+    [/filter_second_attack]
+
+    [floating_text]
+        x,y=$x2,$y2
+        text="<span color='#00ff00'>" + _ "+1 damage" + "</span>"
+    [/floating_text]
+
+    [object]
+        silent=yes
+        duration=forever
+        [filter]
+            x,y=$x2,$y2
+        [/filter]
+
+        [effect]
+            apply_to=attack
+            increase_damage=1
+            range=melee
+            # This will increase all melee attacks by 1. To only increase the attack used in this fight, use
+            name=$second_weapon.name
+        [/effect]
+    [/object]
+[/event]
+#define WEAPON_SPECIAL_SOULTAKER
+[dummy]
+    id=soultaker
+    name= _ "soultaker"
+    description=_ "This unit gains an additional point added to its melee damage whenever it kills a living unit."
+    [filter_opponent]
+        [not]
+            status=undrainable
+        [/not]
+    [/filter_opponent]
+[/dummy]
+#enddef
+[event]
+    name=attack
+    first_time_only=no
+    [filter_attack]
+        special_id=mind_flay
+    [/filter_attack]
+    {VARIABLE hit_number 0}
+[/event]
+[event]
+    name=attacker_hits
+    first_time_only=no
+    [filter_attack]
+        special_id=mind_flay
+    [/filter_attack]
+    {VARIABLE_OP hit_number add 1}
+[/event]
+[event]
+    name=attack_end
+    first_time_only=no
+    [filter_attack]
+        special_id=mind_flay
+    [/filter_attack]
+    {VARIABLE_OP second_unit.experience sub $hit_number}
+    {VARIABLE_OP unit.experience add $hit_number}
+    [unstore_unit]
+        variable=unit
+        text=$hit_number
+        blue=255
+    [/unstore_unit]
+    [unstore_unit]
+        variable=second_unit
+    [/unstore_unit]
+    {CLEAR_VARIABLE hit_number}
+[/event]
+#define WEAPON_SPECIAL_MIND_FLAY
+    [mindflay]
+        id=mind_flay
+        name= _ "Mind Flay"
+        description= _ "When used offensively, each hit of the mind flay attack takes 1 point of experience from the defender and gives it to the attacker."
+        active_on=offense
+    [/mindflay]
+#enddef
+
+#define WEAPON_SPECIAL_WHIRLWIND
+[dummy]      #This can be changed to a dummy tag if you don't want it to do anything.
+    id=whirlwind
+    name= _ "whirlwind"
+    description= _ "When this attack is used, all units adjacent the attacker take the damage, and cannot be countered."
+    value=0
+    apply_to=opponent
+    active_on=offense
+[/dummy]
+#enddef
+[event]
+    name=attacker_hits
+    first_time_only=no
+    [filter_attack]
+        special_id=whirlwind
+    [/filter_attack]
+    {VARIABLE has_drain no}      # Notifies the weapon specials
+    {VARIABLE has_slow no}
+    {VARIABLE has_poison no}
+    [if]
+        [variable]
+            name=weapon.specials.drains.id
+            equals=drains
+        [/variable]
+        [then]
+            {VARIABLE has_drain yes}
+        [/then]
+    [/if]
+    [if]
+        [variable]
+            name=weapon.specials.poison.id
+            equals=poison
+        [/variable]
+        [then]
+            {VARIABLE has_poison yes}
+        [/then]
+    [/if]
+    [if]
+        [variable]
+            name=weapon.specials.slow.id
+            equals=slow
+        [/variable]
+        [then]
+            {VARIABLE has_slow yes}
+        [/then]
+    [/if]
+    [if]
+        [variable]
+            name=has_drain
+            boolean_equals=yes
+        [/variable]
+        [then]
+            [store_unit]        #We need to know how many units were drained, and what were their resistances
+                [filter]
+                    [filter_adjacent]
+                        x,y=$x1,$y1
+                    [/filter_adjacent]
+                    [not]
+                        side=$unit.side
+                    [/not]
+                    [not]         #The target unit is already hit by the attack
+                        x,y=$x2,$y2
+                    [/not]
+                    [not]
+                        status=undrainable,petrified
+                    [/not]
+                [/filter]
+                variable=units
+            [/store_unit]
+            {VARIABLE healed_amount 0}
+            [foreach]
+                array=units
+                [do]
+                    [switch]            #Check the resistances
+                        variable=weapon.type
+                        [case]
+                            value=arcane
+                            {VARIABLE_OP healed_amount add "$($this_item.resistance.arcane*$weapon.damage)"}
+                        [/case]
+                        [case]
+                            value=fire
+                            {VARIABLE_OP healed_amount add "$($this_item.resistance.fire*$weapon.damage)"}
+                        [/case]
+                        [case]
+                            value=cold
+                            {VARIABLE_OP healed_amount add "$($this_item.resistance.cold*$weapon.damage)"}
+                        [/case]
+                        [case]
+                            value=blade
+                            {VARIABLE_OP healed_amount add "$($this_item.resistance.blade*$weapon.damage)"}
+                        [/case]
+                        [case]
+                            value=pierce
+                            {VARIABLE_OP healed_amount add "$($this_item.resistance.pierce*$weapon.damage)"}
+                        [/case]
+                        [case]
+                            value=impact
+                            {VARIABLE_OP healed_amount add "$($this_item.resistance.impact*$weapon.damage)"}
+                        [/case]
+                    [/switch]
+                [/do]
+            [/foreach]
+            #Float the healed amount over the unit, like if it had drained
+            [floating_text]        #Two numbers will float, the one from the regular hit and one from this
+                x,y=$x1,$y1        #Operating with huge numbers because rounding is a problem
+                text="<span color='#00ff00'>" + "$($healed_amount/200)" + "</span>"
+            [/floating_text]
+            [heal_unit]
+                [filter]
+                    x,y=$x1,$y1
+                [/filter]
+                amount=$($healed_amount/200)
+                restore_statuses=no
+                animate=no
+            [/heal_unit]
+            {CLEAR_VARIABLE units,healed_amount}
+        [/then]
+    [/if]
+    [harm_unit]
+        [filter]
+            [filter_adjacent]
+                x,y=$x1,$y1
+            [/filter_adjacent]
+            [not]
+                side=$unit.side
+            [/not]
+            [not]
+                x,y=$x2,$y2
+            [/not]
+            [not]
+                status=petrified
+            [/not]
+        [/filter]
+        [filter_second]
+            x,y=$x1,$y1
+        [/filter_second]
+        amount=$weapon.damage
+        damage_type=$weapon.type
+        fire_event=yes
+        experience=yes      #You will have to think about this
+        poisoned=$has_poison   #We have detected these two effects before
+        slowed=$has_slow
+    [/harm_unit] 
+    {CLEAR_VARIABLE has_slow,has_poison,has_drain}
+[/event]
+`
+
 const unitsData = {
   "Blood Bat": {
     "id": "Blood Bat",

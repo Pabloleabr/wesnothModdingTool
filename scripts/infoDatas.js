@@ -79,9 +79,13 @@ function generateYourUnitImgListHTML(units, onclick) {
       button.title = unit.id;
       
       const img = document.createElement('img');
-      img.src = `imgs/${unit.image}`;
+      let newSrc = 'images/' + unit.image
+      if (loadedImgs.hasOwnProperty(newSrc)){
+        img.src = loadedImgs[newSrc]
+      } else {
+        img.src = `imgs/${unit.image}`;
+      }
       img.alt = unit.id;
-      
       button.appendChild(img);
       li.appendChild(button);
       ul.appendChild(li);
@@ -247,7 +251,7 @@ const alignmentTypesData = [
 const attackTypesData = [
   {
     name: 'Default Attack Types',
-    children: ['blade', 'cold', 'Naga', 'pierce', 'Giant', 'arcane', 'impact', 'fire']
+    children: ['blade', 'cold', 'pierce', 'arcane', 'impact', 'fire']
   }
 ]
 
@@ -265,11 +269,10 @@ const attackSpecialsData = [
   }
 ]
 
-const dieSoundsData = [
+const SoundsData = [
   {
-    name: 'Default Die Sounds',
-    children: ['{SOUND_LIST:HUMAN_OLD_DIE}', 'water-blast.wav', '{SOUND_LIST:ORC_DIE}', 'yeti-die.ogg', '{SOUND_LIST:ORC_SMALL_DIE}', 'wail-long.wav', '{SOUND_LIST:ELF_FEMALE_HIT}', 'ghoul-hit.wav', 'lich-die.ogg', 'skeleton-big-die', '{SOUND_LIST:DWARF_DIE}', '{SOUND_LIST:ZOMBIE_HIT}', '{SOUND_LIST:SKELETON_DIE}', 'bat-flapping.wav', 'naga-die.ogg', 'mermen-die.ogg', 'tusker-die.ogg', 'horse-die.ogg', '{SOUND_LIST:GRYPHON_DIE}', '{SOUND_LIST:HUMAN_DIE}', 'drake-die.ogg', '{SOUND_LIST:ZOMBIE_WEAK_HIT}', '{SOUND_LIST:HUMAN_FEMALE_DIE}', 
-    'mermaid-die.ogg', '{SOUND_LIST:TROLL_DIE}', '{SOUND_LIST:ELF_HIT}', 'hiss-die.wav', '{SOUND_LIST:GOBLIN_DIE}', 'wose-die.ogg', 'squishy-hit.wav', '{SOUND_LIST:OGRE_DIE}', 'hiss-big.wav', '{SOUND_LIST:WOLF_DIE}']
+    name: 'Default Sounds',
+    children: ['hatchet.wav', 'wail-sml.wav', 'tusker-die.ogg', 'crossbow-fire.ogg', '{SOUND_LIST:OGRE_DIE}', '{SOUND_LIST:GOBLIN_DIE}', '{SOUND_LIST:HUMAN_FEMALE_HIT}', 'fire.wav', 'wose-die.ogg', 'zombie-attack.wav', 'mermen-die.ogg', 'wail-long.wav', 'sling-miss.ogg', '{SOUND_LIST:DWARF_DIE}', '{SOUND_LIST:GRYPHON_DIE}', 'drake-die.ogg', 'bow-puny-fire-miss.ogg', '{SOUND_LIST:HUMAN_DIE}', 'skeleton-big-die.ogg', '{SOUND_LIST:THROW}', 'club.ogg', '{SOUND_LIST:SKELETON_HIT}', 'hiss-big.wav', '{SOUND_LIST:ZOMBIE_WEAK_HIT}', 'spear-miss.ogg', '{SOUND_LIST:ORC_SMALL_HIT}', '{SOUND_LIST:HUMAN_OLD_HIT}', 'horse-elf-canter.wav', 'naga-die.ogg', 'yeti-die.ogg', '"bat-flapping.wav"', 'mermaid-die.ogg', 'dagger-swish.wav', 'wail.wav', '{SOUND_LIST:HUMAN_HIT}', 'dwarf-laugh.wav', 'lich-die.ogg', 'magic-dark-big.ogg', 'spear.ogg', 'magic-dark.ogg', 'sling.ogg', '{SOUND_LIST:HUMAN_OLD_DIE}', '{SOUND_LIST:ZOMBIE_HIT}', '{SOUND_LIST:ORC_DIE}', 'bat-flapping.wav', '{SOUND_LIST:BAT_HIT}', '{SOUND_LIST:WOLF_GROWL}', 'gryphon-shriek-1.ogg', '{SOUND_LIST:GRYPHON_HIT}', 'hiss-hit.wav', 'hiss-die.wav', 'crossbow-fire-miss.ogg', '{SOUND_LIST:MISS}', 'bow-puny-fire.ogg', '{SOUND_LIST:HUMAN_FEMALE_DIE}', 'claws.ogg', 'squishy-hit.wav', 'horse-canter.wav', 'hatchet-miss.wav', 'net.wav', 'sling-big-miss.ogg', 'bow.ogg', 'water-blast.wav', '{SOUND_LIST:TROLL_DIE}', '{SOUND_LIST:ELF_HIT}', 'entangle.wav', 'sling-big.ogg', 'horse-die.ogg', '{SOUND_LIST:ELF_FEMALE_HIT}', '{SOUND_LIST:ORC_SMALL_DIE}', '{SOUND_LIST:WOLF_DIE}', '{SOUND_LIST:SKELETON_DIE}', 'ghoul-hit.wav', '{SOUND_LIST:SWORD_SWISH}', 'bow-miss.ogg']
   }
 ];
 
