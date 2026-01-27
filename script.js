@@ -237,41 +237,44 @@ function updateUnitInfoPanel() {
     case 'chaotic':
       alingment = '🌒'
       break;
-      case 'lawful':
-        alingment = '☀️'
+    case 'lawful':
+      alingment = '☀️'
+    break;
+    case 'neutral':
+      alingment = '⚖️'
       break;
-      case 'neutral':
-        alingment = '⚖️'
-        break;
-        case 'liminal':
-          alingment = '🌅'
-          break;
-        }
-        // Update stat values
-  const yourMT = Object.values(selectedMod.qualities).filter((q)=> q.type === "mt" && q.name === movetype && q.resistances).map((q)=>q.resistances.split("\n"))
-  if (resistanceDict.hasOwnProperty(movetype)){
-    document.getElementById('panelBlade').textContent = String((resistanceDict[movetype].blade -100)*-1) + '%';
-    document.getElementById('panelPierce').textContent = String((resistanceDict[movetype].pierce -100)*-1) + '%';
-    document.getElementById('panelImpact').textContent = String((resistanceDict[movetype].impact -100)*-1) + '%';
-    document.getElementById('panelFire').textContent = String((resistanceDict[movetype].fire -100)*-1) + '%';
-    document.getElementById('panelCold').textContent = String((resistanceDict[movetype].cold -100)*-1) + '%';
-    document.getElementById('panelArcane').textContent = String((resistanceDict[movetype].arcane -100)*-1) + '%';
-  } else {
-    document.getElementById('panelBlade').textContent = '-'
-    document.getElementById('panelPierce').textContent = '-'
-    document.getElementById('panelImpact').textContent = '-'
-    document.getElementById('panelFire').textContent = '-'
-    document.getElementById('panelCold').textContent = '-'
-    document.getElementById('panelArcane').textContent = '-'
-    if (yourMT.length > 0) {
-      yourMT[0].forEach((r)=>{
-        const tv = r.split('=')
-        if (tv.length > 1 && attackTypesData[0].children.includes(tv[0])){
-          document.getElementById('panel'+capitalizeFirstLetter(tv[0])).textContent = String((Number(tv[1]) -100)*-1) + '%'
-        }
-      })
+    case 'liminal':
+      alingment = '🌅'
+      break;
     }
-  } 
+  
+    // Update stat values
+    if (resistanceDict.hasOwnProperty(movetype)){
+      document.getElementById('panelBlade').textContent = String((resistanceDict[movetype].blade -100)*-1) + '%';
+      document.getElementById('panelPierce').textContent = String((resistanceDict[movetype].pierce -100)*-1) + '%';
+      document.getElementById('panelImpact').textContent = String((resistanceDict[movetype].impact -100)*-1) + '%';
+      document.getElementById('panelFire').textContent = String((resistanceDict[movetype].fire -100)*-1) + '%';
+      document.getElementById('panelCold').textContent = String((resistanceDict[movetype].cold -100)*-1) + '%';
+      document.getElementById('panelArcane').textContent = String((resistanceDict[movetype].arcane -100)*-1) + '%';
+    } else {
+      document.getElementById('panelBlade').textContent = '-'
+      document.getElementById('panelPierce').textContent = '-'
+      document.getElementById('panelImpact').textContent = '-'
+      document.getElementById('panelFire').textContent = '-'
+      document.getElementById('panelCold').textContent = '-'
+      document.getElementById('panelArcane').textContent = '-'
+      if (selectedMod.qualities) {
+        const yourMT = Object.values(selectedMod.qualities).filter((q)=> q.type === "mt" && q.name === movetype && q.resistances).map((q)=>q.resistances.split("\n"))
+        if (yourMT.length > 0) {
+          yourMT[0].forEach((r)=>{
+            const tv = r.split('=')
+            if (tv.length > 1 && attackTypesData[0].children.includes(tv[0])){
+              document.getElementById('panel'+capitalizeFirstLetter(tv[0])).textContent = String((Number(tv[1]) -100)*-1) + '%'
+            }
+          })
+        }
+      }
+    } 
   document.querySelectorAll('.resistance-type').forEach((e) => {
     const type = e.value
     if (attackTypesData[0].children.includes(type)){
