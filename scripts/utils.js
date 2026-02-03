@@ -106,7 +106,7 @@ function eraToWesnothString(eras) {
     if (era.additionalCode) {
       result += era.additionalCode
     }
-    result += '[/era]\n';
+    result += '\n[/era]\n';
   });
   
   return result;
@@ -395,7 +395,7 @@ function unitToWesnothString(unit) {
                 result += `            image="${frame.image}"\n`;
               }
               if (frame.sound) {
-                result += `            sound="${frame.sound}"\m`;
+                result += `            sound="${frame.sound}"\n`;
               }
               result += '        [/frame]\n';
             }
@@ -414,6 +414,38 @@ function unitToWesnothString(unit) {
   result += '[/unit_type]\n';
   
   return result;
+}
+
+function balanceCalculatior(unit, resistances = 0) {
+  
+  if (!unit.movement || !unit.hitpoints || !unit.cost || ! unit.experience || typeof unit.level !== "number") {
+    return "Needs more info"
+  }
+  
+  let powerScale = Number(unit.hitpoints)
+  powerScale += unit.movement * 5
+  powerScale -= unit.experience/3
+  powerScale += unit.advances_to ? unit.advances_to.split(',').length : 0
+  powerScale += unit.abilities ? unit.abilities.split('\n').length * 5 : 0
+  const aTypes = []
+
+  unit.attacks?.forEach((attack)=> {
+    powerScale += (attack.damage * attack.number) / unit.attacks.length
+    powerScale += attack.abilities ? attack.abilities.length * 5 : 0
+    if (attack.abilities.includes('{WEAPON_SPECIAL_SWARM}')) {
+      powerScale -= 5
+    }
+    powerScale += unit.attacks.length * 2
+    aTypes.push(attack.range)
+  })
+
+  if (aTypes.includes("ranged") && aTypes.includes("melee")){
+    powerScale += 5
+  }
+  if (unit.level < 3) {
+    powerScale += ((unit.level+1)*8)-unit.cost
+  }
+  return ((powerScale + resistances/5)- Math.max(unit.level,1)*12)/68
 }
 
 const input = document.getElementById("folderInput");

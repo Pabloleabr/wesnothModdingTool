@@ -127,7 +127,7 @@ function populateUnitForm() {
   document.getElementById('unitLevel').value = selectedUnit.level || '0';
   document.getElementById('unitExperience').value = selectedUnit.experience || '';
   document.getElementById('unitAlignment').value = selectedUnit.alignment || '';
-  document.getElementById('unitAdvancesTo').value = selectedUnit.advances_to || 'null';
+  document.getElementById('unitAdvancesTo').value = selectedUnit.advances_to || '';
   document.getElementById('unitDescription').value = selectedUnit.description || '';
   document.getElementById('unitUsage').value = selectedUnit.usage || '';
   document.getElementById('unitDieSound').value = selectedUnit.die_sound || '';
@@ -225,12 +225,13 @@ function populateUnitForm() {
 
 // Update unit info panel
 function updateUnitInfoPanel() {
-  const hitpoints = document.getElementById('unitHitpoints').value || '-';
+  const unitInfo = {}
+  unitInfo.hitpoints = document.getElementById('unitHitpoints').value || '-';
   let alingment = document.getElementById('unitAlignment').value || '-';
-  const movement = document.getElementById('unitMovement').value || '-';
-  const level = document.getElementById('unitLevel').value || '-';
-  const cost = document.getElementById('unitCost').value || '-';
-  const experience = document.getElementById('unitExperience').value || '-';
+  unitInfo.movement = document.getElementById('unitMovement').value || '-';
+  unitInfo.level = Number(document.getElementById('unitLevel').value) || 0;
+  unitInfo.cost = document.getElementById('unitCost').value || 0;
+  unitInfo.experience = document.getElementById('unitExperience').value || '-';
   const imagePath = document.getElementById('unitImage').value || '';
   const movetype = document.getElementById('unitMovementType').value
   switch (alingment) {
@@ -275,18 +276,36 @@ function updateUnitInfoPanel() {
         }
       }
     } 
+  const resistanceSum = Number(document.getElementById('panelBlade').textContent.split("%")[0])
+      + Number(document.getElementById('panelPierce').textContent.split("%")[0])
+      + Number(document.getElementById('panelImpact').textContent.split("%")[0]) 
+      + Number(document.getElementById('panelFire').textContent.split("%")[0]) 
+      + Number(document.getElementById('panelCold').textContent.split("%")[0]) 
+      + Number(document.getElementById('panelArcane').textContent.split("%")[0])
+  
+  unitInfo.attacks = selectedUnit.attacks
+  unitInfo.abilities = document.getElementById('unitAbilities').textContent
+  const balancing = balanceCalculatior(unitInfo, resistanceSum);
+  const balanceElement = document.getElementById('panelBalance')
+  if (balancing > 0.75 && balancing <1.25) {
+    balanceElement.style.color = 'white'
+  } else {
+    balanceElement.style.color = 'red'
+  }
+  balanceElement.textContent = balancing.toFixed(2)
+  
   document.querySelectorAll('.resistance-type').forEach((e) => {
     const type = e.value
     if (attackTypesData[0].children.includes(type)){
       document.getElementById('panel'+capitalizeFirstLetter(type)).textContent = e.nextElementSibling.nextElementSibling.value + '%'
     }
   })
-  document.getElementById('panelHitpoints').textContent = hitpoints;
+  document.getElementById('panelHitpoints').textContent = unitInfo.hitpoints;
   document.getElementById('panelAlingment').textContent = alingment;
-  document.getElementById('panelMovement').textContent = movement;
-  document.getElementById('panelLevel').textContent = level;
-  document.getElementById('panelCost').textContent = cost;
-  document.getElementById('panelExperience').textContent = experience;
+  document.getElementById('panelMovement').textContent = unitInfo.movement;
+  document.getElementById('panelLevel').textContent = unitInfo.level;
+  document.getElementById('panelCost').textContent = unitInfo.cost;
+  document.getElementById('panelExperience').textContent = unitInfo.experience;
   // Update image
   const unitImageElement = document.getElementById('unitDisplayImage');
   if (imagePath) {
@@ -349,6 +368,7 @@ function populateEraList() {
       eraDiv.querySelector('[name="defaultFactions"]').checked = era.defaultFactions || false;
       eraDiv.querySelector('[name="defaultAoHFactions"]').checked = era.defaultAoHFactions || false;
       eraDiv.querySelector('[name="extraAbilities"]').checked = era.extraAbilities || false;
+      eraDiv.querySelector('[name="additionalCode"]').value = era.additionalCode || ''
       
       // Populate factions
       if (era.factions && era.factions.length > 0) {
@@ -448,8 +468,15 @@ function addAttack() {
     <label>Icon:<button type="button" class="info-icon" onclick="openModal('Attack Icon Information', attacksData, 'attackIconInput_${attackId}')" title="View Attack Icon information">ℹ️</button></label>
     <input type="text" id="attackIconInput_${attackId}" class="attack-icon" placeholder="attacks/sword.png">
     <br>
-    <label>Type:<button type="button" class="info-icon" onclick="openModal('Attack Types Information', attackTypesData)" title="View Attack types information">ℹ️</button></label>
-    <input type="text" class="attack-type" placeholder="blade">
+    <label>Type:</label>
+    <select class="attack-type">
+      <option value="blade">blade</option>
+      <option value="pierce">pierce</option>
+      <option value="impact">impact</option>
+      <option value="fire">fire</option>
+      <option value="cold">cold</option>
+      <option value="arcane">arcane</option>
+    </select>
     <br>
     <label>Range:</label>
     <select type="text" class="attack-range" placeholder="melee">
@@ -622,12 +649,13 @@ function addEraFrame() {
     <br>
     <label for="additionalCode">Additional Code: (optional for you own custom abilities):</label>
     <br>
-    <textarea name="additionalCode" id="additionalCode" cols="50" rows="15" placeholder="If you don't know leave empty since wrong characters can break the mod"></textarea>
+    <textarea class="code-editor" name="additionalCode" id="additionalCode" cols="50" rows="15" placeholder="If you don't know leave empty since wrong characters can break the mod"></textarea>
     
     <button type="button" style="margin: 6px 0;" onclick="addFaction('${id}')">Add Faction</button>
     <button type="button" onclick="document.getElementById('${id}').remove()">Remove Era</button>
   `;
   container.appendChild(div);
+  addEditorEvent(div.querySelector("#additionalCode"))
 }
 
 function addFaction(eraId) {
@@ -1125,6 +1153,21 @@ unitAnimDefaultClick = (unit) => {
     addToBlockText(unit.movement_anim);
   }
   updateUnitInfoPanel()
+}
+function addEditorEvent(editor){
+  editor.addEventListener("keydown", function (e) {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      this.value =
+        this.value.substring(0, start) +
+        "  " +
+        this.value.substring(end);
+      this.selectionStart = this.selectionEnd = start + 2;
+    }
+  });
+
 }
 // Populate unit default animations selection dropdown
 const unitAnimInput = document.getElementById('unitDefaultAnimation');

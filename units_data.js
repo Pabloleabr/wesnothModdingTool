@@ -747,7 +747,7 @@ const extraAbilities = `[event]
         amount=$weapon.damage
         damage_type=$weapon.type
         fire_event=yes
-        experience=yes      #You will have to think about this
+        experience=no      #You will have to think about this
         poisoned=$has_poison   #We have detected these two effects before
         slowed=$has_slow
     [/harm_unit] 
